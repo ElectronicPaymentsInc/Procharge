@@ -2,7 +2,7 @@
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
-# Procharge API Node.js API
+# Procharge Node.js API
 
 Use this TypeScript library to process sales, authorizations, ticket captures, voids, refunds and balance inquiries with Procharge.
 
@@ -28,9 +28,8 @@ This API is for use with Node.js only and doesn't support other usages, such as 
 npm i procharge
 
 ## Usage
-The package needs to be configured with your account's secret key, which is
-available in the [Procharge Gateway][secure2]. Require it with the key's
-value:
+The package needs to be configured with your account's application key and user login credentials, which is
+available in the [Procharge Gateway][secure2].
 
 <!-- prettier-ignore -->
 ```js
