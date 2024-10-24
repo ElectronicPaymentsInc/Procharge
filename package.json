@@ -1,0 +1,26 @@
+{
+  "name": "procharge",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "procharge",
+    "payments",
+    "typescript"
+  ],
+  "author": "Diego Gil",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "async": "^3.2.6"
+  },
+  "devDependencies": {
+    "@types/async": "^3.2.24",
+    "@types/node": "^22.7.9",
+    "typescript": "^5.6.3"
+  }
+}
