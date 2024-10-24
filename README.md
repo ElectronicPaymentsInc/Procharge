@@ -2,7 +2,7 @@
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
-# Procharge API Node.js SDK
+# Procharge API Node.js API
 
 Use this TypeScript library to process sales, authorizations, ticket captures, voids, refunds and balance inquiries with Procharge.
 
@@ -15,13 +15,13 @@ Use this TypeScript library to process sales, authorizations, ticket captures, v
 
 ## Requirements
 
-Use of the Square Node.js SDK requires:
+Use of the Procharge Node.js API requires:
 
 * Node.js 14 or higher
 
-This SDK supports Node.js versions that are either current, or that are in long-term support status (LTS).  The SDK does not support Node.js versions that have reached their end-of-life (EOL).  For more information on Node.js versioning, see <https://nodejs.org/en/about/releases/>.
+This API supports Node.js versions that are either current, or that are in long-term support status (LTS).  The API does not support Node.js versions that have reached their end-of-life (EOL).  For more information on Node.js versioning, see <https://nodejs.org/en/about/releases/>.
 
-This SDK is for use with Node.js only. It does not support other usages, such as for web browsers or frontend applications.
+This API is for use with Node.js only and doesn't support other usages, such as for web browsers or frontend applications.
 
 ## Installation
 
