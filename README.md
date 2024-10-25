@@ -66,7 +66,7 @@ public client = new Client({
     applicationKey: "test test"
 });
 
-let response: any = await this.client.getAccessToken({
+let response: any = await client.getAccessToken({
     "email": "jdoe@widget.com",
     "password": "Yadda1234",
     "application": "procharge-api"
@@ -117,7 +117,7 @@ transaction.email = "jdoe@widget.com";
 transaction.companyName = "Joes Moving Company";
 transaction.orderNumber = "123456";
 
-let response: TransactionResponse = await this.client.processSale(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.processSale(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -145,7 +145,7 @@ transaction.isEcommerce = true;
 transaction.transactionID = "429811000636";
 transaction.approvalCode = "097502";
 
-let response: TransactionResponse = await this.client.voidSale(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.voidSale(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -187,7 +187,7 @@ transaction.email = "jdoe@widget.com";
 transaction.companyName = "Joes Moving Company";
 transaction.orderNumber = "123456";
 
-let response: TransactionResponse = await this.client.authorizeOnly(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.authorizeOnly(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -219,7 +219,7 @@ transaction.paymentID = 447857739;
 transaction.cardNotPresent = true;
 transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
 
-let response: TransactionResponse = await this.client.voidAuthOnly(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.voidAuthOnly(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -312,7 +312,7 @@ transaction.ccExpYear = "25";
 transaction.cvv = "123";                // <-- Only set if performing cvv verification
 transaction.aci = "N";                  // <-- No avs verification on refunds
 
-let response: TransactionResponse = await this.client.processRefund(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.processRefund(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -410,7 +410,7 @@ transaction.name = "John Doe";
 transaction.street1 = "7305 test street";
 transaction.postalCode = "68114";
 
-let response: TransactionResponse = await this.client.validateCard(transaction).catch((error: any) => {
+let response: TransactionResponse = await client.validateCard(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
