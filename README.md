@@ -31,7 +31,11 @@ npm i procharge
 The package needs to be configured with your account's application key and user login credentials, which is
 available in the [Procharge Gateway][secure2].
 
-Additional documentation can be found here [Procharge API Documentation][api-documentation] which contains examples and schema information.
+Additional documentation can be found here [Procharge API Documentation][api-documentation] which contains examples and schema information under the Card Transactions section.
+
+All of the below examples are using invalid merchantNumber's and invalid credit card information and are fo rdisplay purposes only so be sure to enter valid information when invoking the client.
+
+Within the [Procharge API Documentation][api-documentation] there is a list of mock card numbers you can use for sandbox testing.
 
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
@@ -302,7 +306,7 @@ transaction.amount = "0.05";
 transaction.taxAmount = "0.01";
 transaction.tipAmount = "0.00";
 transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
-transaction.cardNumber = "4761120010000492";
+transaction.cardNumber = "4***********0492";
 transaction.ccExpMonth = "12";
 transaction.ccExpYear = "25";
 transaction.cvv = "123";                // <-- Only set if performing cvv verification
@@ -359,8 +363,16 @@ let transaction: Transaction = new Transaction();
 transaction.merchantNumber = "530160123587469";
 transaction.profileID = 17149798;
 transaction.isEcommerce = true;
+transaction.cardNumber = "4***********8683";
+transaction.ccExpMonth = "12";
+transaction.ccExpYear = "30";
+transaction.cvv = "123";
+transaction.amount = "0.00";
+transaction.taxAmount = "0.00";
+transaction.aci = "N";
+transaction.isPurchaseCard = true;
 transaction.cardNotPresent = true;
-transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.cardTypeIndicator = "P";    // C - Credit, D - Debit, P - Debit PrePaid 
 
 let response: TransactionResponse = await client.prePaidBalanceInquiry(transaction).catch((error: any) => {
     console.log(error);
@@ -375,9 +387,39 @@ if(!response) {
 ```
 
 ## Validate Card
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.amount = "0.00";        // <-- Leave 0.00 amount for validation
+transaction.taxAmount = "0.00";     // <-- Leave 0.00 amount for validation
+transaction.tipAmount = "0.00";
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.cardNumber = "4761120010000492";
+transaction.ccExpMonth = "12";
+transaction.ccExpYear = "25";
+transaction.cvv = "123";                // <-- Only set if performing cvv verification
+transaction.aci = "Y";                  // <-- Only set if performing avs verification
+transaction.name = "John Doe";
+transaction.street1 = "7305 test street";
+transaction.postalCode = "68114";
+
+let response: TransactionResponse = await this.client.validateCard(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
 ```
 
 ### Deprecated APIs
