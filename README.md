@@ -31,6 +31,8 @@ npm i procharge
 The package needs to be configured with your account's application key and user login credentials, which is
 available in the [Procharge Gateway][secure2].
 
+Additional documentation can be found here [Procharge API Documentation][api-documentation] which contains examples and schema information.
+
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 ```
@@ -54,88 +56,72 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
-
+                
 public client = new Client({
     env: Environment.Development,
     applicationKey: "test test"
 });
 
-public async requestAccessToken(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        try {
-                
-            let response: any = await this.client.getAccessToken({
-                "email": "jdoe@widget.com",
-                "password": "Yadda1234",
-                "application": "procharge-api"
-            }).catch((error: any) => {
-                console.log(error);
-                reject(error);
-            });
+let response: any = await this.client.getAccessToken({
+    "email": "jdoe@widget.com",
+    "password": "Yadda1234",
+    "application": "procharge-api"
+}).catch((error: any) => {
+    console.log(error);
+    reject(error);
+});
 
-            if(!response) {
-                return;
-            } else {
-                console.log("access_token: " + response.access_token);
-                console.log("refresh_token: " + response.refresh_token);
-                return resolve(response)
-            }
-        } catch (error: any) {
-            reject(error);
-        }
-    });
-}
+if(!response) {
+    return;
+} else {
+    console.log("access_token: " + response.access_token);
+    console.log("refresh_token: " + response.refresh_token);
+    return resolve(response)
+}  
 ```
 
 ## Sale
 
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
-
-public client = new Client({
+              
+let client = new Client({
     env: Environment.Development,
     applicationKey: "test test"
 });
 
-public async processSale(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        try {
-                
-            let transaction: Transaction = new Transaction();
-            transaction.merchantNumber = "530160123587469";
-            transaction.profileID = 17149798;
-            transaction.isEcommerce = true;
-            transaction.amount = "0.05";
-            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
-            transaction.cardNumber = "4761120010000492";
-            transaction.ccExpMonth = "12";
-            transaction.ccExpYear = "25";
-            transaction.cvv = "123";    // <-- Only set if performing cvv verification
-            transaction.aci = "Y";      // <-- Only set if performing avs verification
-            transaction.name = "John Doe";
-            transaction.street1 = "7305 test street";
-            transaction.street2 = "";
-            transaction.city = "Omaha";
-            transaction.state = "NE";
-            transaction.postalCode = "68114";
-            transaction.email = "jdoe@widget.com";
-            transaction.companyName = "Joes Moving Company";
-            transaction.orderNumber = "123456";
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.amount = "0.05";
+transaction.taxAmount = "0.01";
+transaction.tipAmount = "0.00";
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.cardNumber = "4761120010000492";
+transaction.ccExpMonth = "12";
+transaction.ccExpYear = "25";
+transaction.cvv = "123";    // <-- Only set if performing cvv verification
+transaction.aci = "Y";      // <-- Only set if performing avs verification
+transaction.name = "John Doe";
+transaction.street1 = "7305 test street";
+transaction.street2 = "";
+transaction.city = "Omaha";
+transaction.state = "NE";
+transaction.postalCode = "68114";
+transaction.email = "jdoe@widget.com";
+transaction.companyName = "Joes Moving Company";
+transaction.orderNumber = "123456";
 
-            let response: TransactionResponse = await this.client.processSale(transaction).catch((error: any) => {
-                console.log(error);
-                reject(error);
-            }) as TransactionResponse;
+let response: TransactionResponse = await this.client.processSale(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
 
-            if(!response) {
-                return;
-            } else {
-                return resolve(response)
-            }
-        } catch (error: any) {
-            reject(error);
-        }
-    });
+if(!response) {
+    return;
+} else {
+    return resolve(response)
 }
 ```
 
@@ -143,36 +129,27 @@ public async processSale(): Promise<any> {
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
-public client = new Client({
+let client = new Client({
     env: Environment.Development,
     applicationKey: "test test"
 });
-
-public async voidSale(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        try {
                 
-            let transaction: Transaction = new Transaction();
-            transaction.merchantNumber = "530160123587469";
-            transaction.profileID = 17149798;
-            transaction.isEcommerce = true;
-            transaction.transactionID = "429811000636";
-            transaction.approvalCode = "097502";
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.transactionID = "429811000636";
+transaction.approvalCode = "097502";
 
-            let response: TransactionResponse = await this.client.voidSale(transaction).catch((error: any) => {
-                console.log(error);
-                reject(error);
-            }) as TransactionResponse;
+let response: TransactionResponse = await this.client.voidSale(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
 
-            if(!response) {
-                return;
-            } else {
-                return resolve(response)
-            }
-        } catch (error: any) {
-            reject(error);
-        }
-    });
+if(!response) {
+    return;
+} else {
+    return resolve(response)
 }
 ```
 
@@ -180,50 +157,41 @@ public async voidSale(): Promise<any> {
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
-public client = new Client({
+let client = new Client({
     env: Environment.Development,
     applicationKey: "test test"
 });
-
-public async authorizeOnly(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        try {
                 
-            let transaction: Transaction = new Transaction();
-            transaction.merchantNumber = "530160123587469";
-            transaction.profileID = 17149798;
-            transaction.isEcommerce = true;
-            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
-            transaction.amount = "0.05";
-            transaction.cardNumber = "4761120010000492";
-            transaction.ccExpMonth = "12";
-            transaction.ccExpYear = "25";
-            transaction.cvv = "123";    // <-- Only set if performing cvv verification
-            transaction.aci = "Y";      // <-- Only set if performing avs verification
-            transaction.name = "John Doe";
-            transaction.street1 = "7305 test street";
-            transaction.street2 = "";
-            transaction.city = "Omaha";
-            transaction.state = "NE";
-            transaction.postalCode = "68114";
-            transaction.email = "jdoe@widget.com";
-            transaction.companyName = "Joes Moving Company";
-            transaction.orderNumber = "123456";
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.amount = "0.05";
+transaction.cardNumber = "4761120010000492";
+transaction.ccExpMonth = "12";
+transaction.ccExpYear = "25";
+transaction.cvv = "123";    // <-- Only set if performing cvv verification
+transaction.aci = "Y";      // <-- Only set if performing avs verification
+transaction.name = "John Doe";
+transaction.street1 = "7305 test street";
+transaction.street2 = "";
+transaction.city = "Omaha";
+transaction.state = "NE";
+transaction.postalCode = "68114";
+transaction.email = "jdoe@widget.com";
+transaction.companyName = "Joes Moving Company";
+transaction.orderNumber = "123456";
 
-            let response: TransactionResponse = await this.client.authorizeOnly(transaction).catch((error: any) => {
-                console.log(error);
-                reject(error);
-            }) as TransactionResponse;
+let response: TransactionResponse = await this.client.authorizeOnly(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
 
-            if(!response) {
-                return;
-            } else {
-                return resolve(response)
-            }
-        } catch (error: any) {
-            reject(error);
-        }
-    });
+if(!response) {
+    return;
+} else {
+    return resolve(response)
 }
 ```
 
@@ -231,69 +199,179 @@ public async authorizeOnly(): Promise<any> {
 ```js
 import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
-public client = new Client({
+let client = new Client({
     env: Environment.Development,
     applicationKey: "test test"
 });
+               
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.transactionID = "429811000636";
+transaction.approvalCode = "097502";
+transaction.invoiceID = 447803694;
+transaction.paymentID = 447857739;
+transaction.cardNotPresent = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
 
-public async voidAuthOnly(): Promise<any> {
-    return new Promise(async (resolve, reject) => {
-        try {
-                
-            let transaction: Transaction = new Transaction();
-            transaction.merchantNumber = "530160123587469";
-            transaction.profileID = 17149798;
-            transaction.isEcommerce = true;
-            transaction.transactionID = "429811000636";
-            transaction.approvalCode = "097502";
-            transaction.invoiceID = 447803694;
-            transaction.paymentID = 447857739;
-            transaction.cardNotPresent = true;
-            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+let response: TransactionResponse = await this.client.voidAuthOnly(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
 
-            let response: TransactionResponse = await this.client.voidAuthOnly(transaction).catch((error: any) => {
-                console.log(error);
-                reject(error);
-            }) as TransactionResponse;
-
-            if(!response) {
-                return;
-            } else {
-                return resolve(response)
-            }
-        } catch (error: any) {
-            reject(error);
-        }
-    });
+if(!response) {
+    return;
+} else {
+    return resolve(response)
 }
 ```
 
 ## Ticket Completion
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+        
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469"; 
+transaction.profileID = 17149798;   
+transaction.isEcommerce = true;
+transaction.transactionID = "429811000636";    
+transaction.approvalCode = "097502";
+transaction.invoiceID = 447803694;
+transaction.paymentID = 447857739;
+transaction.cardNotPresent = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.amount = "0.05";
+transaction.taxAmount = "0.01";
+
+let response: TransactionResponse = await client.completeTicket(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
 ```
+
 ## Void Ticket
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.transactionID = "429811000636";
+transaction.approvalCode = "097502";
+transaction.cardNotPresent = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+
+let response: TransactionResponse = await client.voidTicketOnly(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}        
 ```
 
 ## Refund
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.amount = "0.05";
+transaction.taxAmount = "0.01";
+transaction.tipAmount = "0.00";
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.cardNumber = "4761120010000492";
+transaction.ccExpMonth = "12";
+transaction.ccExpYear = "25";
+transaction.cvv = "123";                // <-- Only set if performing cvv verification
+transaction.aci = "N";                  // <-- No avs verification on refunds
+
+let response: TransactionResponse = await this.client.processRefund(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
 ```
 
 ## Void Refund
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.transactionID = "429811000636";
+transaction.approvalCode = "097502";
+transaction.cardNotPresent = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+
+let response: TransactionResponse = await client.voidRefund(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}        
 ```
+
 ## PrePaid Balance Inquiry
-<!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge-api";
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isEcommerce = true;
+transaction.cardNotPresent = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+
+let response: TransactionResponse = await client.prePaidBalanceInquiry(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
 ```
 
 ## Validate Card
@@ -309,4 +387,5 @@ import { Transaction, Client, Environment } from "procharge-api";
 [sign up with procharge]: https://secure2.procharge.com
 
 [secure2]: https://secure2.procharge.com
-[version]: 1.0.0
+[procharge-api]: https://dev-api.procharge.com/api/developers
+[version]: 1.0.1
