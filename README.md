@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-1.0.5-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.0.6-yellow.svg)](https://semver.org)
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
@@ -55,6 +55,8 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 * [Void Refund](#void-refund)
 * [PrePaid Balance Inquiry](#prepaid-balance-inquiry)
 * [Validate Card](#validate-card)
+* [EMV](#emv)
+* [Swiped Sale](#swiped-sale)
 
 ## Request Access Token
 
@@ -423,16 +425,72 @@ transaction.amount = "0.00";        // <-- Leave 0.00 amount for validation
 transaction.taxAmount = "0.00";     // <-- Leave 0.00 amount for validation
 transaction.tipAmount = "0.00";
 transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
-transaction.cardNumber = "4761120010000492";
-transaction.ccExpMonth = "12";
-transaction.ccExpYear = "25";
-transaction.cvv = "123";                // <-- Only set if performing cvv verification
 transaction.aci = "Y";                  // <-- Only set if performing avs verification
 transaction.name = "John Doe";
 transaction.street1 = "7305 test street";
 transaction.postalCode = "68114";
 
 let response: TransactionResponse = await client.validateCard(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+## EMV
+```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isRetail = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.emv = "5F2A020840820258008407A0000000031010950502800080009A031806259C01009F02060000000020009F03060000000000009F0902008C9F100706011203A000009F1A0208409F1E0832343437383135335F24032212319F2608B4E599A67DD0828E9F2701809F3303E0F8C89F34031E03009F3501229F360200029F3704B71461199F4104000006755F340101";
+transaction.aci = "N";
+
+let response: TransactionResponse = await client.processSale(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as TransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+## Swiped Sale
+```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: Transaction = new Transaction();
+transaction.merchantNumber = "530160123587469";
+transaction.profileID = 17149798;
+transaction.isRetail = true;
+transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+transaction.trackData = "4761739001010010D24122010000000000000";
+transaction.aci = "N";
+
+let response: TransactionResponse = await client.processSale(transaction).catch((error: any) => {
     console.log(error);
     reject(error);
 }) as TransactionResponse;
@@ -452,4 +510,4 @@ if(!response) {
 
 [secure2]: https://secure2.procharge.com
 [api-documentation]: https://dev-api.procharge.com/api/developers
-[version]: 1.0.5
+[version]: 1.0.6
