@@ -33,8 +33,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Client = exports.Environment = exports.TransactionResponse = exports.Transaction = exports.RetailItem = exports.ReceiptItem = exports.Lodging = exports.Restaurant = exports.RetailMoto = exports.CygmaResponse = exports.ResponseElements = void 0;
-//import { Transaction } from "./src/classes/transaction";
-// import { TransactionResponse } from "./src/classes/transaction-response";
 const https = __importStar(require("https"));
 class ResponseElements {
     constructor() {
@@ -1188,7 +1186,6 @@ class Client {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.options.applicationKey,
                             "Content-Length": JSON.stringify(authRequest).length
                         }
                     };
