@@ -2266,8 +2266,8 @@ export class TransactionResponse {
 }
 
 export class Environment {
-    public static Development: string = "https://dev-api.procharge.com";
-    public static Production: string = "https://api.procharge.com";
+    public static Development: string = "dev-api.procharge.com";
+    public static Production: string = "api.procharge.com";
 }
 
 export class Client {
