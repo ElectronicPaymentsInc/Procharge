@@ -1,5 +1,3 @@
-//import { Transaction } from "./src/classes/transaction";
-// import { TransactionResponse } from "./src/classes/transaction-response";
 import * as https from "https";
 
 export class ResponseElements {
@@ -2319,7 +2317,6 @@ export class Client {
                     rejectUnauthorized: false,
                     headers: {
                         "Content-Type": "application/json;charset=UTF-8",
-                        "x-api-key": this.options.applicationKey,
                         "Content-Length": JSON.stringify(authRequest).length
                     }
                 };
