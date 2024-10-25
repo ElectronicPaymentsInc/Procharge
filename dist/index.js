@@ -1141,8 +1141,8 @@ exports.TransactionResponse = TransactionResponse;
 class Environment {
 }
 exports.Environment = Environment;
-Environment.Development = "https://dev-api.procharge.com";
-Environment.Production = "https://api.procharge.com";
+Environment.Development = "dev-api.procharge.com";
+Environment.Production = "api.procharge.com";
 class Client {
     constructor(options) {
         this.options = options;

@@ -2300,7 +2300,7 @@ export class Client {
                 }
 
                 let authRequest: any = {
-                    "application": creds.appname,
+                    "application": creds.application,
                     "email": creds.email,
                     "password": creds.password
                 };
