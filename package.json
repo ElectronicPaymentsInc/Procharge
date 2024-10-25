@@ -1,11 +1,15 @@
 {
-  "name": "procharge",
-  "version": "1.0.0",
+  "name": "procharge-api",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElectronicPaymentsInc/Procharge.git"
   },
   "keywords": [
     "procharge",
@@ -14,7 +18,11 @@
   ],
   "author": "Diego Gil",
   "license": "ISC",
-  "description": "",
+  "description": "Procharge API",
+  "bugs": {
+    "url": "https://github.com/ElectronicPaymentsInc/Procharge/issues"
+  },
+  "homepage": "https://github.com/ElectronicPaymentsInc/Procharge#readme",
   "dependencies": {
     "async": "^3.2.6"
   },

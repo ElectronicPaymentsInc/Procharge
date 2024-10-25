@@ -32,7 +32,7 @@ The package needs to be configured with your account's application key and user 
 available in the [Procharge Gateway][secure2].
 
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 ```
 
 ## API Reference
@@ -53,7 +53,7 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 ## Request Access Token
 
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
 public client = new Client({
     env: Environment.Development,
@@ -67,7 +67,7 @@ public async requestAccessToken(): Promise<any> {
             let response: any = await this.client.getAccessToken({
                 "email": "jdoe@widget.com",
                 "password": "Yadda1234",
-                "application": "procharge"
+                "application": "procharge-api"
             }).catch((error: any) => {
                 console.log(error);
                 reject(error);
@@ -90,7 +90,7 @@ public async requestAccessToken(): Promise<any> {
 ## Sale
 
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
 public client = new Client({
     env: Environment.Development,
@@ -141,7 +141,7 @@ public async processSale(): Promise<any> {
 
 ## Void Sale
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
 public client = new Client({
     env: Environment.Development,
@@ -178,7 +178,7 @@ public async voidSale(): Promise<any> {
 
 ## Auth Only
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
 public client = new Client({
     env: Environment.Development,
@@ -229,7 +229,7 @@ public async authorizeOnly(): Promise<any> {
 
 ## Void Auth Only
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
 
 public client = new Client({
     env: Environment.Development,
@@ -271,35 +271,35 @@ public async voidAuthOnly(): Promise<any> {
 ## Ticket Completion
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 ## Void Ticket
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 
 ## Refund
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 
 ## Void Refund
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 ## PrePaid Balance Inquiry
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 
 ## Validate Card
 <!-- prettier-ignore -->
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Transaction, Client, Environment } from "procharge-api";
 ```
 
 ### Deprecated APIs
