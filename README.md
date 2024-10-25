@@ -106,6 +106,7 @@ public async processSale(): Promise<any> {
             transaction.profileID = 17149798;
             transaction.isEcommerce = true;
             transaction.amount = "0.05";
+            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
             transaction.cardNumber = "4761120010000492";
             transaction.ccExpMonth = "12";
             transaction.ccExpYear = "25";
@@ -192,6 +193,7 @@ public async authorizeOnly(): Promise<any> {
             transaction.merchantNumber = "530160123587469";
             transaction.profileID = 17149798;
             transaction.isEcommerce = true;
+            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
             transaction.amount = "0.05";
             transaction.cardNumber = "4761120010000492";
             transaction.ccExpMonth = "12";
@@ -227,7 +229,43 @@ public async authorizeOnly(): Promise<any> {
 
 ## Void Auth Only
 ```js
-import { Transaction, Client, Environment } from "procharge";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+
+public client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test"
+});
+
+public async voidAuthOnly(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+                
+            let transaction: Transaction = new Transaction();
+            transaction.merchantNumber = "530160123587469";
+            transaction.profileID = 17149798;
+            transaction.isEcommerce = true;
+            transaction.transactionID = "429811000636";
+            transaction.approvalCode = "097502";
+            transaction.invoiceID = 447803694;
+            transaction.paymentID = 447857739;
+            transaction.cardNotPresent = true;
+            transaction.cardTypeIndicator = "C";    // C - Credit, D - Debit, P - Debit PrePaid 
+
+            let response: TransactionResponse = await this.client.voidAuthOnly(transaction).catch((error: any) => {
+                console.log(error);
+                reject(error);
+            }) as TransactionResponse;
+
+            if(!response) {
+                return;
+            } else {
+                return resolve(response)
+            }
+        } catch (error: any) {
+            reject(error);
+        }
+    });
+}
 ```
 
 ## Ticket Completion
