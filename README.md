@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-1.0.4-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.0.5-yellow.svg)](https://semver.org)
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
@@ -237,6 +237,8 @@ if(!response) {
 
 ## Ticket Completion
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -270,6 +272,8 @@ if(!response) {
 
 ## Void Ticket
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -299,6 +303,8 @@ if(!response) {
 
 ## Refund
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -333,6 +339,8 @@ if(!response) {
 
 ## Void Refund
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -362,6 +370,8 @@ if(!response) {
 
 ## PrePaid Balance Inquiry
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -397,6 +407,8 @@ if(!response) {
 
 ## Validate Card
 ```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+
 let client = new Client({
     env: Environment.Development,
     applicationKey: "test test",
@@ -440,4 +452,4 @@ if(!response) {
 
 [secure2]: https://secure2.procharge.com
 [api-documentation]: https://dev-api.procharge.com/api/developers
-[version]: 1.0.4
+[version]: 1.0.5
