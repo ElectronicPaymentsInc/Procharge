@@ -187,12 +187,17 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.authToken) {
+                        const pr = new transaction_response_1.TransactionResponse();
+                        pr.responseText = "authToken is required";
                         return reject(pr);
                     }
                     transaction.universalTimeStamp = new Date().getTime();
@@ -259,7 +264,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -348,12 +353,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!transaction.approvalCode) {
@@ -405,7 +410,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -496,12 +501,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     transaction.universalTimeStamp = new Date().getTime();
@@ -570,7 +575,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -659,12 +664,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!transaction.approvalCode) {
@@ -719,7 +724,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -810,12 +815,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!transaction.approvalCode) {
@@ -907,7 +912,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -997,12 +1002,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!transaction.approvalCode) {
@@ -1063,7 +1068,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -1154,12 +1159,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     transaction.universalTimeStamp = new Date().getTime();
@@ -1221,7 +1226,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -1311,12 +1316,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!transaction.approvalCode) {
@@ -1379,7 +1384,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -1469,12 +1474,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     transaction.universalTimeStamp = new Date().getTime();
@@ -1539,7 +1544,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
@@ -1628,12 +1633,12 @@ class Client {
                     }
                     if (!transaction.merchantNumber) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "merchant number is required";
+                        pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
-                        pr.responseText = "Application Key is required";
+                        pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     transaction.universalTimeStamp = new Date().getTime();
@@ -1697,7 +1702,7 @@ class Client {
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
                             "x-api-key": this.options.applicationKey,
-                            "Authorization": "",
+                            "Authorization": this.options.authToken,
                             "Content-Length": JSON.stringify(transaction).length
                         }
                     };
