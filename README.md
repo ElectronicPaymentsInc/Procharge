@@ -387,5 +387,5 @@ import { Transaction, Client, Environment } from "procharge-api";
 [sign up with procharge]: https://secure2.procharge.com
 
 [secure2]: https://secure2.procharge.com
-[procharge-api]: https://dev-api.procharge.com/api/developers
+[api-documentation]: https://dev-api.procharge.com/api/developers
 [version]: 1.0.1
