@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-1.0.0-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.0.4-yellow.svg)](https://semver.org)
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
@@ -33,7 +33,7 @@ available in the [Procharge Gateway][secure2].
 
 Additional documentation can be found here [Procharge API Documentation][api-documentation] which contains examples and schema information under the Card Transactions section.
 
-All of the below examples are using invalid merchantNumber's and invalid credit card information and are fo rdisplay purposes only so be sure to enter valid information when invoking the client.
+All the below examples are using an invalid merchant number and credit card and are for documentation purposes only so be sure to enter valid information when invoking the client.
 
 Within the [Procharge API Documentation][api-documentation] there is a list of mock card numbers you can use for sandbox testing.
 
@@ -91,7 +91,8 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
               
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -135,7 +136,8 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
                 
 let transaction: Transaction = new Transaction();
@@ -163,7 +165,8 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
                 
 let transaction: Transaction = new Transaction();
@@ -205,7 +208,8 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
                
 let transaction: Transaction = new Transaction();
@@ -235,7 +239,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
         
 let transaction: Transaction = new Transaction();
@@ -267,7 +272,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -295,7 +301,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -328,7 +335,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -356,7 +364,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -390,7 +399,8 @@ if(!response) {
 ```js
 let client = new Client({
     env: Environment.Development,
-    applicationKey: "test test"
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 });
 
 let transaction: Transaction = new Transaction();
@@ -430,4 +440,4 @@ if(!response) {
 
 [secure2]: https://secure2.procharge.com
 [api-documentation]: https://dev-api.procharge.com/api/developers
-[version]: 1.0.1
+[version]: 1.0.4
