@@ -87,6 +87,7 @@ export class Transaction {
     /**
      * @deprecated tip_amount is deprecated. Use tipAmount instead.
      */  
+    public tip_amount: string;
     public tipAmount: string;
 
     /**
@@ -97,6 +98,7 @@ export class Transaction {
     /**
      * @deprecated tax_amount is deprecated. Use taxAmount instead.
      */
+    public tax_amount: string;
     public taxAmount: string;
     public cashBackAmount: string;
     public cashAdvanceAmount: string;   // allow customer to get cash from their credit card
@@ -145,7 +147,7 @@ export class Transaction {
      */
     public approval_code: string;
     public approvalCode: string;
-    
+
     public sandbox: string;
     public target: string;
     public transactionID: string;
