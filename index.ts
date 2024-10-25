@@ -5,10 +5,18 @@ import { RetailMoto } from "./src/classes/retail-moto";
 import { Restaurant } from "./src/classes/restaurant";
 import { Lodging } from "./src/classes/lodging";
 
+export { Transaction } from "./src/classes/transaction";
+export { TransactionResponse } from "./src/classes/transaction-response";
+export { RetailMoto } from "./src/classes/retail-moto";
+export { Restaurant } from "./src/classes/restaurant";
+export { Lodging } from "./src/classes/lodging";
+export { ReceiptItem } from  "./src/classes/receipt-item";
+
 export class Environment {
     public static Development: string = "https://dev-api.procharge.com";
     public static Production: string = "https://api.procharge.com";
 }
+
 
 export class Client {
     public constructor(private options: any) {
@@ -18,25 +26,31 @@ export class Client {
     /**
      * Use this method to obtain a jwt access token
      */
-    public async getAccessToken(email: string, password: string, appname: string = "procharge"): Promise<TransactionResponse> {
+    public async getAccessToken(creds: any): Promise<TransactionResponse> {
         return new Promise(async (resolve, reject) => {            
             try {
-                if (!email) {
+                if (!creds) {
+                    const pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "invalid request";
+                    return reject(pr);
+                }
+
+                if (!creds.email) {
                     const pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "email is required";
                     return reject(pr);
                 }
 
-                if (!password) {
+                if (!creds.password) {
                     const pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "password is required";
                     return reject(pr);
                 }
 
                 let authRequest: any = {
-                    "application": appname,
-                    "email": email,
-                    "password": password
+                    "application": creds.appname,
+                    "email": creds.email,
+                    "password": creds.password
                 };
 
                 let options = {
@@ -133,7 +147,7 @@ export class Client {
     /**
      * This method will submit a one time sale and debit a customers account
      */
-    public async processSale(transaction: Transaction): Promise<TransactionResponse> {
+    public async processSale(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {            
             try {
 
@@ -311,7 +325,7 @@ export class Client {
     /**
      * This method will void a previous sale in the same batch
      */
-    public async voidSale(transaction: Transaction): Promise<TransactionResponse> {
+    public async voidSale(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {            
             try {
 
@@ -473,7 +487,7 @@ export class Client {
      * This method will obtain an authorization for a card number. A
      * ticket only request is required to complete the transaction at the time of order fulfillment.
      */
-    public async authorizeOnly(transaction: Transaction): Promise<TransactionResponse> {
+    public async authorizeOnly(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {            
             try {
                 if (!transaction) {
@@ -653,7 +667,7 @@ export class Client {
     /**
      * This method will void an auth only request
      */
-    public async voidAuthOnly(transaction: Transaction): Promise<TransactionResponse> {
+    public async voidAuthOnly(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
@@ -819,7 +833,7 @@ export class Client {
     /**
      * This method will complete an auth only transaction
      */
-    public async completeTicket(transaction: Transaction): Promise<TransactionResponse> {
+    public async completeTicket(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {            
             try {
                 if (!transaction) {
@@ -1028,7 +1042,7 @@ export class Client {
     /**
      * This method will void a ticket only transaction
      */
-    public async voidTicketOnly(transaction: Transaction): Promise<TransactionResponse> {
+    public async voidTicketOnly(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
@@ -1199,7 +1213,7 @@ export class Client {
      * Use this method to refund a customer for a transaction on a closed batch. Use
      * void transactions only on an open batch 
      */
-    public async processRefund(transaction: Transaction): Promise<TransactionResponse> {
+    public async processRefund(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {            
             try {
                 if (!transaction) {
@@ -1371,7 +1385,7 @@ export class Client {
     /**
      * Use this method to void a previous refund
      */
-    public async voidRefund(transaction: Transaction): Promise<TransactionResponse> {
+    public async voidRefund(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
@@ -1544,7 +1558,7 @@ export class Client {
     /**
      * Use this method to get the balance on a pre paid debit card
      */
-    public async prePaidBalanceInquiry(transaction: Transaction): Promise<TransactionResponse> {
+    public async prePaidBalanceInquiry(transaction: Transaction): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {

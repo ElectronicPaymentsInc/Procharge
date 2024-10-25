@@ -32,42 +32,64 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Procharge = void 0;
+exports.Client = exports.Environment = exports.ReceiptItem = exports.Lodging = exports.Restaurant = exports.RetailMoto = exports.TransactionResponse = exports.Transaction = void 0;
 const transaction_response_1 = require("./src/classes/transaction-response");
 const https = __importStar(require("https"));
 const retail_moto_1 = require("./src/classes/retail-moto");
 const restaurant_1 = require("./src/classes/restaurant");
 const lodging_1 = require("./src/classes/lodging");
-class Procharge {
-    constructor(applicationKey) {
-        this.applicationKey = applicationKey;
+var transaction_1 = require("./src/classes/transaction");
+Object.defineProperty(exports, "Transaction", { enumerable: true, get: function () { return transaction_1.Transaction; } });
+var transaction_response_2 = require("./src/classes/transaction-response");
+Object.defineProperty(exports, "TransactionResponse", { enumerable: true, get: function () { return transaction_response_2.TransactionResponse; } });
+var retail_moto_2 = require("./src/classes/retail-moto");
+Object.defineProperty(exports, "RetailMoto", { enumerable: true, get: function () { return retail_moto_2.RetailMoto; } });
+var restaurant_2 = require("./src/classes/restaurant");
+Object.defineProperty(exports, "Restaurant", { enumerable: true, get: function () { return restaurant_2.Restaurant; } });
+var lodging_2 = require("./src/classes/lodging");
+Object.defineProperty(exports, "Lodging", { enumerable: true, get: function () { return lodging_2.Lodging; } });
+var receipt_item_1 = require("./src/classes/receipt-item");
+Object.defineProperty(exports, "ReceiptItem", { enumerable: true, get: function () { return receipt_item_1.ReceiptItem; } });
+class Environment {
+}
+exports.Environment = Environment;
+Environment.Development = "https://dev-api.procharge.com";
+Environment.Production = "https://api.procharge.com";
+class Client {
+    constructor(options) {
+        this.options = options;
     }
     /**
      * Use this method to obtain a jwt access token
      */
-    getAccessToken(email_1, password_1) {
-        return __awaiter(this, arguments, void 0, function* (email, password, appname = "procharge") {
+    getAccessToken(creds) {
+        return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    if (!email) {
+                    if (!creds) {
+                        const pr = new transaction_response_1.TransactionResponse();
+                        pr.responseText = "invalid request";
+                        return reject(pr);
+                    }
+                    if (!creds.email) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "email is required";
                         return reject(pr);
                     }
-                    if (!password) {
+                    if (!creds.password) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "password is required";
                         return reject(pr);
                     }
                     let authRequest = {
-                        "application": appname,
-                        "email": email,
-                        "password": password
+                        "application": creds.appname,
+                        "email": creds.email,
+                        "password": creds.password
                     };
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/authentication/login",
                         allowHTTP1: true,
@@ -76,7 +98,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Content-Length": JSON.stringify(authRequest).length
                         }
                     };
@@ -154,7 +176,7 @@ class Procharge {
     /**
      * This method will submit a one time sale and debit a customers account
      */
-    sale(transaction) {
+    processSale(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -168,7 +190,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -227,7 +249,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -236,7 +258,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -329,7 +351,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -373,7 +395,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -382,7 +404,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -463,7 +485,7 @@ class Procharge {
      * This method will obtain an authorization for a card number. A
      * ticket only request is required to complete the transaction at the time of order fulfillment.
      */
-    authOnly(transaction) {
+    authorizeOnly(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -477,7 +499,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -538,7 +560,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -547,7 +569,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -640,7 +662,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -687,7 +709,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -696,7 +718,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -777,7 +799,7 @@ class Procharge {
     /**
      * This method will complete an auth only transaction
      */
-    ticketOnly(transaction) {
+    completeTicket(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -791,7 +813,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -875,7 +897,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -884,7 +906,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -978,7 +1000,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -1031,7 +1053,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -1040,7 +1062,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -1121,7 +1143,7 @@ class Procharge {
      * Use this method to refund a customer for a transaction on a closed batch. Use
      * void transactions only on an open batch
      */
-    refund(transaction) {
+    processRefund(transaction) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -1135,7 +1157,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -1189,7 +1211,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -1198,7 +1220,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -1292,7 +1314,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -1347,7 +1369,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -1356,7 +1378,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -1450,7 +1472,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -1507,7 +1529,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -1516,7 +1538,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -1609,7 +1631,7 @@ class Procharge {
                         pr.responseText = "merchant number is required";
                         return reject(pr);
                     }
-                    if (!this.applicationKey) {
+                    if (!this.options.applicationKey) {
                         const pr = new transaction_response_1.TransactionResponse();
                         pr.responseText = "Application Key is required";
                         return reject(pr);
@@ -1665,7 +1687,7 @@ class Procharge {
                     let options = {
                         method: "POST",
                         protocol: "https:",
-                        host: "dev-api.procharge.com",
+                        host: this.options.env,
                         port: 443,
                         path: "/api/transaction",
                         allowHTTP1: true,
@@ -1674,7 +1696,7 @@ class Procharge {
                         rejectUnauthorized: false,
                         headers: {
                             "Content-Type": "application/json;charset=UTF-8",
-                            "x-api-key": this.applicationKey,
+                            "x-api-key": this.options.applicationKey,
                             "Authorization": "",
                             "Content-Length": JSON.stringify(transaction).length
                         }
@@ -1751,4 +1773,4 @@ class Procharge {
         });
     }
 }
-exports.Procharge = Procharge;
+exports.Client = Client;

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = exports.RetailItem = void 0;
 const retail_moto_1 = require("./retail-moto");
-const lodging_1 = require("./lodging");
 const restaurant_1 = require("./restaurant");
+const lodging_1 = require("./lodging");
 class RetailItem {
 }
 exports.RetailItem = RetailItem;

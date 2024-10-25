@@ -1,4 +1,4 @@
-import { Transaction } from "./transaction";
+import { Transaction } from "../../index";
 
 export class Lodging {
     public arrivalDate: string | null | undefined;

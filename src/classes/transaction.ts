@@ -1,10 +1,8 @@
 import { RetailMoto } from "./retail-moto";
-import { Lodging } from "./lodging";
 import { Restaurant } from "./restaurant";
-import { TransactionResponse } from "./transaction-response";
+import { Lodging } from "./lodging";
 import { ReceiptItem } from  "./receipt-item";
-import * as http from "http";
-import * as https from "https";
+import { TransactionResponse } from  "./transaction-response";
 
 export class RetailItem {
     public departmentName: string | undefined;
@@ -79,6 +77,7 @@ export class Transaction {
     /**
      * @deprecated cc_exp_year is deprecated. Use ccExpYear instead.
      */     
+    public cc_exp_year: string;
     public ccExpYear: string;
     public cvv: string;
     public amount: string;
@@ -144,7 +143,9 @@ export class Transaction {
     /**
      * @deprecated approval_code is deprecated. Use approvalCode instead.
      */
+    public approval_code: string;
     public approvalCode: string;
+    
     public sandbox: string;
     public target: string;
     public transactionID: string;
