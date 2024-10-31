@@ -1,8 +1,9 @@
-[![version](https://img.shields.io/badge/version-1.0.14-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.0.15-yellow.svg)](https://semver.org)
 [![npm version](https://img.shields.io/badge/npm-10.8.3-red.svg)](https://semver.org)
 [![node version](https://img.shields.io/badge/node-v20.13.1-green.svg)](https://semver.org)
 
 # Procharge Node.js API
+If you are interested in processing payments with Electronic Payments click here [Merchant Signup][merchant-signup] to start the process.
 
 Use this TypeScript library to process sales, authorizations, ticket captures, voids, refunds and balance inquiries with Procharge.
 
@@ -38,13 +39,14 @@ All the below examples are using an invalid merchant number and credit card and 
 Within the [Procharge API Documentation][api-documentation] there is a list of mock card numbers you can use for sandbox testing.
 
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 ```
 
 ## API Reference
 
 ### Methods
 * [Request Access Token](#request-access-token)
+* [Refresh Token](#refresh-token)
 * [Sale](#sale)
 * [Void Sale](#void-sale)
 * [Auth Only](#auth-only)
@@ -58,20 +60,53 @@ import { Client, Environment, Transaction, TransactionResponse } from "procharge
 * [EMV](#emv)
 * [Swiped Sale](#swiped-sale)
 
+### Gift Cards
+* [Gift Card Activation](#gift-card-activation)
+* [Redeem Gift Card](#redeem-gift-card)
+* [Gift Card Balance Transfer](#gift-card-balance-transfer)
+* [Gift Card Balance Inquiry](#gift-card-balance-inquiry)
+* [Gift Card Void](#gift-card-void)
+
 ## Request Access Token
 
+> Use the same credentials that you use when logging into the Procharge Gateway portal.
+
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
                 
 let client = new Client({
     env: Environment.Development
 });
 
 let response: any = await client.getAccessToken({
-    "email": "jdoe@widget.com",
-    "password": "Yadda1234",
-    "application": "procharge-api"
+    "userName": "john doe",
+    "passWord": "Yadda1234",
+    "pin": "1234567",
+    "application": "procharge"
 }).catch((error: any) => {
+    console.log(error);
+    reject(error);
+});
+
+if(!response) {
+    return;
+} else {
+    console.log("access_token: " + response.access_token);
+    console.log("refresh_token: " + response.refresh_token);
+    return resolve(response)
+}  
+```
+
+## Refresh Token
+
+```js
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
+                
+let client = new Client({
+    env: Environment.Development
+});
+
+let response: any = await client.getRefreshToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9......").catch((error: any) => {
     console.log(error);
     reject(error);
 });
@@ -88,7 +123,7 @@ if(!response) {
 ## Sale
 
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
               
 let client = new Client({
     env: Environment.Development,
@@ -133,7 +168,7 @@ if(!response) {
 
 ## Void Sale
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -162,7 +197,7 @@ if(!response) {
 
 ## Auth Only
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -205,7 +240,7 @@ if(!response) {
 
 ## Void Auth Only
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -238,7 +273,7 @@ if(!response) {
 
 ## Ticket Completion
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -273,7 +308,7 @@ if(!response) {
 
 ## Void Ticket
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -304,7 +339,7 @@ if(!response) {
 
 ## Refund
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -340,7 +375,7 @@ if(!response) {
 
 ## Void Refund
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -371,7 +406,7 @@ if(!response) {
 
 ## PrePaid Balance Inquiry
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -408,7 +443,7 @@ if(!response) {
 
 ## Validate Card
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -443,7 +478,7 @@ if(!response) {
 
 ## EMV
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -473,7 +508,7 @@ if(!response) {
 
 ## Swiped Sale
 ```js
-import { Client, Environment, Transaction, TransactionResponse } from "procharge-api";
+import { Client, Environment, Transaction, TransactionResponse } from "procharge";
 
 let client = new Client({
     env: Environment.Development,
@@ -500,13 +535,190 @@ if(!response) {
     return resolve(response)
 }
 ```
+## Gift Cards
+
+> <span style="font-weight: 600">entryMode values</span>
+>
+>>| Value  | Description   |
+>>| ------------- |:-------------|
+>>| -1     | OMITTED       |
+>>| 0      | OTHER         |
+>>| 1      | MAGNETIC      |
+>>| 2      | MANUAL        |
+>>| 3      | BARCODE       |
+>>| 4      | CONTACTLESS   |
+>>| 5      | EMV           |
+> ***
+
+> <span style="font-weight: 600">industryType values</span>
+>
+>>| Value  | Description   |
+>>| ------------- |:-------------|
+>>| 0      | INACTIVE      |
+>>| 1      | RETAIL        |
+>>| 2      | RESTAURANT    |
+>>| 3      | HOTEL         |
+>>| 4      | FUEL          |
+>>| 10     | HOUSE ACCOUNT |
+> ***
+
+><span style="font-weight: 700">Swiped Versus Manual Entry</span>
+>
+>>Swiped entries use the track2 property
+>>
+>>>**transaction.track2 = "6265555707036313=0000"**
+>>
+>>Manual entries use the cardNo property
+>>
+>>>**transaction.cardNo = "6265555707036313"**
+> ***
+
+### Gift Card Activation
+```js
+import { Client, Environment, GiftCardTransaction, GiftCardTransactionResponse } from "procharge";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: GiftCardTransaction = new GiftCardTransaction();
+transaction.track2 = "6265555707036313=0000";
+transaction.entryMode = "1";
+transaction.industryType = "1"; 
+
+let response: GiftCardTransactionResponse = await client.activateGiftCard(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as GiftCardTransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+### Redeem Gift Card
+```js
+import { Client, Environment, GiftCardTransaction, GiftCardTransactionResponse } from "procharge";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: GiftCardTransaction = new GiftCardTransaction();
+transaction.track2 = "6265555707036313=0000";
+transaction.entryMode = "1";
+transaction.industryType = "1";
+transaction.amount = 0.05;
+
+let response: GiftCardTransactionResponse = await client.redeemGiftCard(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as GiftCardTransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+### Gift Card Balance Transfer
+```js
+import { Client, Environment, GiftCardTransaction, GiftCardTransactionResponse } from "procharge";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: GiftCardTransaction = new GiftCardTransaction();
+transaction.fromCardNo = "6265555707036313";
+transaction.cardNo = "6609603310096204";
+transaction.entryMode = "2";
+transaction.industryType = "1";
+transaction.amount = 5.00;
+
+let response: GiftCardTransactionResponse = await client.transferGiftCardBalance(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as GiftCardTransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+### Gift Card Balance Inquiry
+```js
+import { Client, Environment, GiftCardTransaction, GiftCardTransactionResponse } from "procharge";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: GiftCardTransaction = new GiftCardTransaction();
+transaction.track2 = "6265555707036313=0000";
+transaction.entryMode = "1";
+transaction.industryType = "1";
+transaction.amount = 0.00;
+
+let response: GiftCardTransactionResponse = await client.giftCardBalanceInquiry(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as GiftCardTransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
+
+### Gift Card Void
+```js
+import { Client, Environment, GiftCardTransaction, GiftCardTransactionResponse } from "procharge";
+
+let client = new Client({
+    env: Environment.Development,
+    applicationKey: "test test",
+    authToken: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+});
+
+let transaction: GiftCardTransaction = new GiftCardTransaction();
+transaction.entryMode = "2";
+transaction.industryType = "1";
+transaction.amount = 1.00;
+transaction.transactionID = "255410";
+
+let response: GiftCardTransactionResponse = await client.voidGiftCardSale(transaction).catch((error: any) => {
+    console.log(error);
+    reject(error);
+}) as GiftCardTransactionResponse;
+
+if(!response) {
+    return;
+} else {
+    return resolve(response)
+}
+```
 
 ### Deprecated APIs
-* None
+* procharge-api
 
 [Procharge API]: https://dev-api.procharge.com/api/developers
-[sign up with procharge]: https://secure2.procharge.com
+[merchant-signup]: https://electronicpayments.com/merchants/
 
 [secure2]: https://secure2.procharge.com
 [api-documentation]: https://dev-api.procharge.com/api/developers
-[version]: 1.0.14
+[version]: 1.0.15

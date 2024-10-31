@@ -4,29 +4,29 @@ export class ResponseElements {
     public AlternteResponseText: string;
     public AuthorizedAmount: number;
     public AVSResponseCode: string;
-    public AVSNetworkResultCode: string;    
+    public AVSNetworkResultCode: string;
     public BatchNumber: string;
     public CardType: string;
     public HardwareVendorIdentifier: string;
     public HostResponse: string;
-    public InvoiceERCReferenceNumber: string; 
-    public MarketSpecificDataRequest: string;   
-    public MarketSpecificDataResponse: string; 
+    public InvoiceERCReferenceNumber: string;
+    public MarketSpecificDataRequest: string;
+    public MarketSpecificDataResponse: string;
     public NetworkReferenceNumber: string;
-    public NetworkResponseCode: string; 
+    public NetworkResponseCode: string;
     public OriginalAmount: string;
     public OriginalMessageType: string;
-    public OriginalProcessingCode: number;         
+    public OriginalProcessingCode: number;
     public OriginalSystemTraceAuditNumber: string;
-    public OriginalTransactionDate: string;    
+    public OriginalTransactionDate: string;
     public POSEntryMode: string;
-    public ProductId: string;    
-    public PARData: string; 
-    public ResponseACI: string;    
-    public SoftwareIdentifier: string;  
+    public ProductId: string;
+    public PARData: string;
+    public ResponseACI: string;
+    public SoftwareIdentifier: string;
     public ValidationCode: string;
     public DownGradeReasonCodeResponse: string;
-    
+
     constructor() {
 
     }
@@ -373,10 +373,10 @@ export class RetailMoto {
             this.fdrAssignedTPP = transaction.retailIndustry.FDRAssignedTPP || "TEP500";
             this.FDRAssignedTPP = transaction.retailIndustry.FDRAssignedTPP || "TEP500";
 
-            if(transaction.isPurchaseCard) {
+            if (transaction.isPurchaseCard) {
                 this.RetailTerms = transaction.retailIndustry.RetailTerms || "1";
             }
-            
+
             this.MCFinalAuthIndicator = transaction.retailIndustry.MCFinalAuthIndicator || undefined;
             this.MCWalletIdentifier = transaction.retailIndustry.MCWalletIdentifier || undefined;
             this.MCDirSrvrTransId = transaction.retailIndustry.MCDirSrvrTransId || " ".repeat(36);
@@ -608,7 +608,7 @@ export class RetailMoto {
         } else {
             this.FDRAssignedTPP = "TEP500";
 
-            if(transaction.isPurchaseCard) {
+            if (transaction.isPurchaseCard) {
                 this.RetailTerms = "1";
             }
 
@@ -619,8 +619,8 @@ export class RetailMoto {
             this.TaxAmount = (transaction && transaction.taxAmount) ? transaction.taxAmount.toString() : "";
 
             this.fdrAssignedTPP = "TEP500";
-            
-            if(transaction.isPurchaseCard) {
+
+            if (transaction.isPurchaseCard) {
                 this.retailTerms = "1";
             }
 
@@ -931,11 +931,11 @@ export class Restaurant {
             this.digitalWalletProgramType = transaction.restaurantIndustry.digitalWalletProgramType;
             this.visaSpecialConditionIndicator = transaction.restaurantIndustry.visaSpecialConditionIndicator;
             this.deferredAuthIndicator = transaction.restaurantIndustry.deferredAuthIndicator;
-            
+
             if (transaction.transactionCode === "1" || transaction.transactionCode === "4") {
                 this.avsZipCode = transaction.restaurantIndustry.avsZipCode || transaction.postalCode;
             }
-            
+
             this.posDataCodes = transaction.restaurantIndustry.posDataCodes;
 
         } else {
@@ -1061,7 +1061,7 @@ export class Lodging {
                     break;
                 default:
                     this.partialAuthIndicator = (transaction.lodgingIndustry.partialAuthIndicator) ? transaction.lodgingIndustry.partialAuthIndicator : transaction.partialAuthIndicator || "2";
-                break;
+                    break;
             }
 
             this.fdrAssignedTPP = transaction.lodgingIndustry.fdrAssignedTPP || "TEP500";
@@ -1069,9 +1069,9 @@ export class Lodging {
             this.mcTraceID = transaction.lodgingIndustry.mcTraceID;
             this.mcFraudVoidFlag = transaction.lodgingIndustry.mcFraudVoidFlag;
             this.mcFinalAuthIndicator = transaction.lodgingIndustry.mcFinalAuthIndicator || "1";
-            
-            if(transaction.hasOwnProperty("isPurchaseCard") && transaction.isPurchaseCard === true) {
-                if(!transaction.cardNotPresent && transaction.posConditionCode != "08" && transaction.posConditionCode != "59") {
+
+            if (transaction.hasOwnProperty("isPurchaseCard") && transaction.isPurchaseCard === true) {
+                if (!transaction.cardNotPresent && transaction.posConditionCode != "08" && transaction.posConditionCode != "59") {
                     this.giftCardIndicator = transaction.lodgingIndustry.giftCardIndicator ? transaction.lodgingIndustry.giftCardIndicator : transaction.giftCardIndicator || "1";
                 } else {
                     this.giftCardIndicator = "0";
@@ -1106,11 +1106,11 @@ export class Lodging {
             this.cardTypeIndicator = transaction.cardTypeIndicator || "C";
             this.mcFinalAuthIndicator = "1";
             this.merchantInitiatedTransIndicator = transaction.mitIndicator || "";
-            
+
             if (transaction.transactionCode === "1" || transaction.transactionCode === "4") {
                 transaction.aci = transaction.aci || "Y";
                 this.authCharIndicator = (transaction && transaction.authCharIndicator) ? transaction.authCharIndicator : ((transaction && transaction.aci) ? transaction.aci : "Y");
-                this.avsZipCode = transaction.postalCode || "";                
+                this.avsZipCode = transaction.postalCode || "";
                 this.authCharIndicator = "Y";
             } else {
                 this.authCharIndicator = (transaction && transaction.authCharIndicator) ? transaction.authCharIndicator : ((transaction && transaction.aci) ? transaction.aci : "");
@@ -1125,7 +1125,7 @@ export class Lodging {
             this.mitAdditionalData = "";
             this.citMITIndicator = transaction.citMitIndicator || "";
 
-            if(transaction.hasOwnProperty("isPurchaseCard") && transaction.isPurchaseCard === true) {
+            if (transaction.hasOwnProperty("isPurchaseCard") && transaction.isPurchaseCard === true) {
                 this.giftCardIndicator = transaction.giftCardIndicator || "1";
             } else {
                 this.giftCardIndicator = transaction.giftCardIndicator || "";
@@ -1142,9 +1142,9 @@ export class Lodging {
                     break;
                 default:
                     this.partialAuthIndicator = transaction.partialAuthIndicator || "2";
-                break;
+                    break;
             }
-            
+
         }
     }
 }
@@ -1244,8 +1244,8 @@ export class Transaction {
     public transactionCode: string;
     public acquirerID: string | undefined;
     public hardwareVendorIdentifier: string = "FISP";
-    public softwareIdentifier: string = "0002"; 
-    public stan: number | undefined;    
+    public softwareIdentifier: string = "0002";
+    public stan: number | undefined;
     public protocolType: string;
     public name: string;
     public firstName: string;
@@ -1287,13 +1287,13 @@ export class Transaction {
 
     /**
      * @deprecated cc_type is deprecated. Use ccExpMonth instead.
-     */    
+     */
     public cc_exp_month: string;
     public ccExpMonth: string;
 
     /**
      * @deprecated cc_exp_year is deprecated. Use ccExpYear instead.
-     */     
+     */
     public cc_exp_year: string;
     public ccExpYear: string;
     public cvv: string;
@@ -1303,13 +1303,14 @@ export class Transaction {
 
     /**
      * @deprecated tip_amount is deprecated. Use tipAmount instead.
-     */  
+     */
     public tip_amount: string;
     public tipAmount: string;
 
     /**
      * @deprecated tax_rate is deprecated. Use taxRate instead.
-     */     
+     */
+    public tax_rate: string | undefined;
     public taxRate: string | undefined;
 
     /**
@@ -1317,6 +1318,7 @@ export class Transaction {
      */
     public tax_amount: string;
     public taxAmount: string;
+
     public cashBackAmount: string;
     public cashAdvanceAmount: string;   // allow customer to get cash from their credit card
     public transactionFee: string | undefined;
@@ -1331,7 +1333,7 @@ export class Transaction {
     public cashDiscountAmount: string;
     public email: string;
     public phone: string;
-    public cell: string;    
+    public cell: string;
 
     /**
      * @deprecated companyname is deprecated. Use companyName instead.
@@ -1342,12 +1344,12 @@ export class Transaction {
     /**
      * @deprecated merchantid is deprecated. Use merchantID instead.
      */
-    public merchantid: number; 
+    public merchantid: number;
     public merchantID: number;
 
     /**     
-     * @deprecated profileid is deprecated. Use merchantID instead.
-     */ 
+     * @deprecated profileid is deprecated. Use profileID instead.
+     */
     public profileid: number;   // deprecated use profileID         
     public profileID: number;
 
@@ -1384,13 +1386,13 @@ export class Transaction {
 
     /**
      * @deprecated itemnumber is deprecated. Use itemNumber instead.
-     */    
+     */
     public itemnumber: string;
     public itemNumber: string;
 
     /**
      * @deprecated revisionnumber is deprecated. Use revisionNumber instead.
-     */      
+     */
     public revisionnumber: string;
     public revisionNumber: string;
 
@@ -1398,18 +1400,18 @@ export class Transaction {
 
     /**
      * @deprecated InvoiceId is deprecated. Use invoiceID instead.
-     */   
+     */
     public InvoiceId: number;
     public invoiceID: number;
     /**
      * @deprecated InvoiceNum is deprecated. Use invoiceNum instead.
-     */  
+     */
     public InvoiceNum: string;
     public invoiceNum: string;
 
     /**
      * @deprecated PaymentId is deprecated. Use paymentID instead.
-     */  
+     */
     public PaymentId: number;
     public paymentID: number;
 
@@ -1418,7 +1420,7 @@ export class Transaction {
 
     /**
      * @deprecated AuthCharIndicator is deprecated. Use aci instead.
-     */  
+     */
     public AuthCharIndicator: string;
     public authCharIndicator: string;
     public industryType: string;
@@ -1429,13 +1431,13 @@ export class Transaction {
     public isSettled: boolean | undefined;
     public isRecurring: boolean;
     public isInstallment: boolean;
-    public byPassBatchCheck: boolean | undefined;    
+    public byPassBatchCheck: boolean | undefined;
     public paymentType: string;
     public paymentToken: any;     // apple pay token, google pay token.    
 
     /**
      * @deprecated terminalId is deprecated. Use terminalID instead.
-     */      
+     */
     public terminalId: string;
     public terminalID: string;
 
@@ -1471,8 +1473,8 @@ export class Transaction {
     public originalProductID: string | undefined;
     public originalSTAN: number | undefined;
     public originalTransactionDate: string | undefined;
-    public originalTransactionTime: number | undefined;   
-    public validationCode: string | undefined; 
+    public originalTransactionTime: number | undefined;
+    public validationCode: string | undefined;
     public secureProtocolVerNum3D: string | undefined;  // visa only - 3DS Protocol Version Number
     public customerID: number;
     public items: ReceiptItem[] = [];
@@ -1486,7 +1488,7 @@ export class Transaction {
         this.dateTime = new Date();
         this.universalTimeStamp = new Date().getTime();
         this.hardwareVendorIdentifier = "FISP";
-        this.softwareIdentifier = "0002"; 
+        this.softwareIdentifier = "0002";
         this.applicationKey = "";
         this.isProcharge = true;
         this.isMoto = false;
@@ -1563,7 +1565,7 @@ export class Transaction {
         this.paymentToken = {};     // apple pay token, google pay token.
         this.sandbox_batchnum = "";
         this.sandbox_itemnum = "";
-        this.deviceModel = "";        
+        this.deviceModel = "";
         this.isOffline = false;
         this.isRecurring = false;
         this.isInstallment = false;
@@ -1610,177 +1612,177 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. TransactionCode is deprecated. Use transactionCode instead.
-     */    
+     */
     public TransactionCode: string;
 
     /**
      * @deprecated Case changed to camel case. ActionCode is deprecated. Use actionCode instead.
-     */ 
+     */
     public ActionCode: number;
 
     /**
      * @deprecated Case changed to camel case. ResponseCode is deprecated. Use responseCode instead.
-     */     
+     */
     public ResponseCode: number;
 
     /**
      * @deprecated Case changed to camel case. ValidationCode is deprecated. Use validationCode instead.
-     */     
+     */
     public ValidationCode: string;
 
     /**
      * @deprecated Case changed to camel case. DeviceId is deprecated. Use deviceID instead.
-     */     
+     */
     public DeviceId: string;
 
     /**
      * @deprecated Case changed to camel case. BatchId is deprecated. Use batchID instead.
-     */     
+     */
     public BatchId: number | string | null | undefined;
 
     /**
      * @deprecated Case changed to camel case. BatchNumber is deprecated. Use batchNumber instead.
-     */    
+     */
     public BatchNumber: string;
 
     /**
      * @deprecated Case changed to camel case. ItemNumber is deprecated. Use itemNumber instead.
-     */     
+     */
     public ItemNumber: number | string;
 
     /**
      * @deprecated Case changed to camel case. RevisionNumber is deprecated. Use revisionNumber instead.
-     */    
+     */
     public RevisionNumber: number;
 
     /**
      * @deprecated Case changed to camel case. ResponseText is deprecated. Use responseText instead.
-     */     
+     */
     public ResponseText: string;
 
     /**
      * @deprecated Case changed to camel case. AuthorizationNumber is deprecated. Use authorizationNumber instead.
-     */     
+     */
     public AuthorizationNumber: string;
 
     /**
      * @deprecated Case changed to camel case. OriginalAuthorizationNumber is deprecated. Use originalAuthorizationNumber instead.
-     */     
-    public OriginalAuthorizationNumber: string;   
-    
+     */
+    public OriginalAuthorizationNumber: string;
+
     /**
      * @deprecated Case changed to camel case. AVSResponseText is deprecated. Use avsResponseText instead.
-     */     
+     */
     public AVSResponseText: string;
 
     /**
      * @deprecated Case changed to camel case. DebitCardTypeNumber is deprecated. Use debitCardTypeNumber instead.
-     */ 
+     */
     public DebitCardTypeNumber: number;
 
     /**
      * @deprecated Case changed to camel case. DebitNetworkName is deprecated. Use debitNetworkName instead.
-     */    
+     */
     public DebitNetworkName: string;
 
     /**
      * @deprecated Case changed to camel case. Caption is deprecated. Use caption instead.
-     */    
+     */
     public Caption: string;
 
     /**
      * @deprecated Case changed to camel case. CVVResponseText is deprecated. Use cvvResponseText instead.
-     */    
+     */
     public CVVResponseText: string;
 
     /**
      * @deprecated Case changed to camel case. AuthCharIndicator is deprecated. Use authCharIndicator instead.
-     */     
+     */
     public AuthCharIndicator: string;
 
     /**
      * @deprecated Case changed to camel case. TransactionIdentifier is deprecated. Use transactionIdentifier instead.
-     */    
+     */
     public TransactionIdentifier: string;
 
     /**
      * @deprecated Case changed to camel case. RetrievalReferenceNumber is deprecated. Use retrievalReferenceNumber instead.
-     */    
+     */
     public RetrievalReferenceNumber: string;
 
     /**
      * @deprecated Case changed to camel case. TransactionType is deprecated. Use transactionType instead.
-     */    
+     */
     public TransactionType: string;
 
     /**
      * @deprecated Case changed to camel case. AID is deprecated. Use aid instead.
-     */    
+     */
     public AID: string;
 
     /**
      * @deprecated Case changed to camel case. AppName is deprecated. Use appName instead.
-     */    
+     */
     public AppName: string;
 
     /**
      * @deprecated Case changed to camel case. EMVTerminalID is deprecated. Use emvTerminalID instead.
-     */    
+     */
     public EMVTerminalID: string;
 
     /**
      * @deprecated Case changed to camel case. POSEntryMode is deprecated. Use posEntryMode instead.
-     */     
+     */
     public POSEntryMode: string;
 
     /**
      * @deprecated Case changed to camel case. NFC is deprecated. Use nfc instead.
-     */    
+     */
     public NFC: boolean;
 
     /**
      * @deprecated Case changed to camel case. MarketSpecificIndicator is deprecated. Use marketSpecificIndicator instead.
-     */     
+     */
     public MarketSpecificIndicator: string;
 
     /**
      * @deprecated Case changed to camel case. BalanceCaption is deprecated. Use balanceCaption instead.
-     */     
+     */
     public BalanceCaption: string;
 
     /**
      * @deprecated Case changed to camel case. RemainingBalance is deprecated. Use remainingBalance instead.
-     */    
+     */
     public RemainingBalance: string;
 
     /**
      * @deprecated Case changed to camel case. BalanceSign is deprecated. Use balanceSign instead.
-     */    
+     */
     public BalanceSign: string;
 
     /**
      * @deprecated Case changed to camel case. ApprovedAmountCaption is deprecated. Use approvedAmountCaption instead.
-     */    
+     */
     public ApprovedAmountCaption: string;
 
     /**
      * @deprecated Case changed to camel case. ApprovedAmount is deprecated. Use approvedAmount instead.
-     */ 
+     */
     public ApprovedAmount: string;
 
     /**
      * @deprecated Case changed to camel case. RequestedAmountCaption is deprecated. Use requestedAmountCaption instead.
-     */    
+     */
     public RequestedAmountCaption: string;
 
     /**
      * @deprecated Case changed to camel case. RequestedAmount is deprecated. Use requestedAmount instead.
-     */    
+     */
     public RequestedAmount: string;
 
     /**
      * @deprecated Case changed to camel case. AdditionalResponseIndicator is deprecated. Use additionalResponseIndicator instead.
-     */     
+     */
     public AdditionalResponseIndicator: string;
 
     /**
@@ -1790,32 +1792,32 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. InvoiceId is deprecated. Use invoiceID instead.
-     */    
+     */
     public InvoiceId: number;
 
     /**
      * @deprecated Case changed to camel case. InvoiceNum is deprecated. Use invoiceNum instead.
-     */    
+     */
     public InvoiceNum: string;
 
     /**
      * @deprecated Case changed to camel case. PaymentId is deprecated. Use paymentID instead.
-     */ 
+     */
     public PaymentId: number;
 
     /**
      * @deprecated Case changed to camel case. TaxRate is deprecated. Use taxRate instead.
-     */ 
+     */
     public TaxRate: number;
 
     /**
      * @deprecated Case changed to camel case. CashDiscountAmount is deprecated. Use cashDiscountAmount instead.
-     */    
+     */
     public CashDiscountAmount: number;
 
     /**
      * @deprecated Case changed to camel case. ReverseCashDiscountAmount is deprecated. Use reverseCashDiscountAmount instead.
-     */     
+     */
     public ReverseCashDiscountAmount: number;
 
     /**
@@ -1825,27 +1827,27 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. EMV is deprecated. Use emv instead.
-     */    
+     */
     public EMV: string;
 
     /**
      * @deprecated Case changed to camel case. RoutingCode is deprecated. Use routingCode instead.
-     */    
+     */
     public RoutingCode: string;
 
     /**
      * @deprecated Case changed to camel case. SignatureCode is deprecated. Use signatureCode instead.
-     */     
+     */
     public SignatureCode: string;
 
     /**
      * @deprecated Case changed to camel case. NetworkName is deprecated. Use networkName instead.
-     */    
+     */
     public NetworkName: string;
 
     /**
      * @deprecated Case changed to camel case. PAR_ID is deprecated. Use parID instead.
-     */     
+     */
     public PAR_ID: string;
 
     /**
@@ -1855,7 +1857,7 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. EBTNetworkName is deprecated. Use ebtNetworkName instead.
-     */    
+     */
     public EBTNetworkName: string;
 
     /**
@@ -1865,12 +1867,12 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. EBTBalance is deprecated. Use ebtBalance instead.
-     */    
+     */
     public EBTBalance: string;
 
     /**
      * @deprecated Case changed to camel case. SignatureRequired is deprecated. Use signatureRequired instead.
-     */ 
+     */
     public SignatureRequired: boolean;
 
     /**
@@ -1880,17 +1882,17 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. CustomerReceipt is deprecated. Use customerReceipt instead.
-     */    
+     */
     public CustomerReceipt: string;
 
     /**
      * @deprecated Case changed to camel case. UnpredictableNumber is deprecated. Use unpredictableNumber instead.
-     */    
+     */
     public UnpredictableNumber: string;
-    
+
     /**
      * @deprecated Case changed to camel case. ErrorMessage is deprecated. Use errorMessage instead.
-     */    
+     */
     public ErrorMessage: string;
 
     /**
@@ -1905,22 +1907,22 @@ export class TransactionResponse {
 
     /**
      * @deprecated Case changed to camel case. NetworkReferenceNumber is deprecated. Use networkReferenceNumber instead.
-     */    
+     */
     public NetworkReferenceNumber: string;
 
     /**
      * @deprecated Case changed to camel case. NetworkResponseCode is deprecated. Use networkResponseCode instead.
-     */ 
+     */
     public NetworkResponseCode: string;
 
     /**
      * @deprecated Case changed to camel case. ResponseACI is deprecated. Use responseACI instead.
-     */    
+     */
     public ResponseACI: string;
 
     /**
      * @deprecated Case changed to camel case. MarketSpecificDataResponse is deprecated. Use marketSpecificDataResponse instead.
-     */     
+     */
     public MarketSpecificDataResponse: string;
 
     /**
@@ -1931,8 +1933,8 @@ export class TransactionResponse {
     /**
      * @deprecated Case changed to camel case. DownGradeReasonCodeResponse is deprecated. Use downGradeReasonCodeResponse instead.
      */
-    public DownGradeReasonCodeResponse: string;   
-    
+    public DownGradeReasonCodeResponse: string;
+
     public dateTime: Date;
     public merchantNumber: string;
     public transactionCode: string;
@@ -2001,9 +2003,9 @@ export class TransactionResponse {
     public responseACI: string;
     public marketSpecificDataResponse: string;
     public productID: string;
-    public downGradeReasonCodeResponse: string; 
+    public downGradeReasonCodeResponse: string;
     public authOnlyID: number | string | null | undefined;
-    public universalTimeStamp: number; 
+    public universalTimeStamp: number;
     public cygmaResponse: any;
 
     constructor(universalTimeStamp: number = 0) {
@@ -2065,7 +2067,7 @@ export class TransactionResponse {
         this.ErrorMessage = "";
         this.SystemsTraceNumber = 0;
 
-        this.universalTimeStamp = universalTimeStamp;        
+        this.universalTimeStamp = universalTimeStamp;
         this.cygmaResponse = new CygmaResponse();
 
         this.dateTime = new Date();
@@ -2145,7 +2147,7 @@ export class TransactionResponse {
 
         switch (value) {
             case "A":
-                this.avsResponseText = "Address Matches. ZIP Code does not Match";                
+                this.avsResponseText = "Address Matches. ZIP Code does not Match";
                 break;
             case "B":
                 this.avsResponseText = "Street Address matches for international transaction. Postal code not verified due to incompatible formats";
@@ -2264,6 +2266,42 @@ export class TransactionResponse {
         this.CVVResponseText = this.cvvResponseText;
     }
 }
+export class GiftCardTransaction {
+    public transactionCode: string = "";
+    public cardNo: string = "";
+    public fromCardNo: string = "";
+    public track2: string = "";
+    public industryType: string = "";
+    public entryMode: string = "";
+    public amount: number = 0.00;
+    public transactionID: string = "";
+
+    constructor() {
+        this.transactionCode = "";
+        this.cardNo = "";
+        this.fromCardNo = "";
+        this.track2 = "";
+        this.industryType = "1";
+        this.entryMode = "";
+        this.amount = 0.00;
+        this.transactionID = "";
+    }
+}
+
+export class GiftCardTransactionResponse {
+    public PubStrGC_ResultCode: string = "";
+    public PubStrGC_TransactionID: string = "";
+    public PubStrGC_RuleID: string = "";
+    public PubStrGC_TransactionAmount: string = "";
+    public PubStrGC_CardBalance: string = "";
+    public PubStrGC_ReasonCode: string = "";
+    public PubStrGC_ResultText: string = "";
+    public PubStrGC_VoidTransactionID: string = "";
+    public EntryMode: string = "";
+    public PubIntPaymentID: string = "";
+    public PubIntInvoiceID: string = "";
+    public responseText: string = "";
+}
 
 export class Environment {
     public static Development: string = "dev-api.procharge.com";
@@ -2272,30 +2310,36 @@ export class Environment {
 
 export class Client {
     public constructor(private options: any) {
-        
+
     }
 
     /**
-     * Use this method to obtain a jwt access token
+     * Use this method to obtain a jwt access token. Use same credentials used to log into Procharge Gateway.
      */
     public async getAccessToken(creds: any): Promise<TransactionResponse> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
                 if (!creds) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "invalid request";
                     return reject(pr);
                 }
 
                 if (!creds.email) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "email is required";
                     return reject(pr);
                 }
 
                 if (!creds.password) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "password is required";
+                    return reject(pr);
+                }
+
+                if (!creds.application) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "application name is required";
                     return reject(pr);
                 }
 
@@ -2369,13 +2413,11 @@ export class Client {
                     });
                 }).on("error", (error: any) => {
                     let pr: TransactionResponse = new TransactionResponse();
-                    pr.transactionCode = "1";
                     pr.responseText = error.message;
                     return reject(pr);
                 }).on("timeout", (error: any) => {
                     let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
-                    pr.transactionCode = "1";
                     return reject(pr);
                 }).on("socket", (socket: any) => {
                     socket.on("end", () => {
@@ -2386,9 +2428,106 @@ export class Client {
                 request.setTimeout(15000);
                 request.write(JSON.stringify(authRequest));
                 request.end();
-
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to obtain a new jwt access token by using the refresh_token passed in the original log in response
+     */
+    public async getRefreshToken(refreshToken: string): Promise<TransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+
+                if (!refreshToken) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "refreshToken is required";
+                    return reject(pr);
+                }
+
+                let options = {
+                    method: "GET",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: `/api/authentication/refresh/${refreshToken}`,
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: TransactionResponse = new TransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: TransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new TransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new TransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new TransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as TransactionResponse;
+                            }
+
+                            result.transactionCode = "1";
+                            result.dateTime = new Date();
+                            resolve(result);
+
+                        } catch (error: any) {
+                            let pr: TransactionResponse = new TransactionResponse();
+                            pr.transactionCode = "1";
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.end();
+            } catch (error: any) {
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 return reject(pr);
             }
@@ -2399,29 +2538,29 @@ export class Client {
      * This method will submit a one time sale and debit a customers account
      */
     public async processSale(transaction: Transaction): Promise<any> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
 
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
 
                 if (!this.options.authToken) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "authToken is required";
                     return reject(pr);
                 }
@@ -2444,39 +2583,39 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
 
                     if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid amount";
                         return reject(pr);
                     }
 
                     if (parseFloat(transaction.amount) <= 0) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "amount must be greater than zero dollars";
                         return reject(pr);
                     }
 
                     if (transaction.paymentGatewayID === "4") {
                         if (parseFloat(transaction.amount) > 999999.99) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "amount cannot be greater than 99999.99";
                             return reject(pr);
                         }
@@ -2572,7 +2711,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 return reject(pr);
             }
@@ -2583,23 +2722,23 @@ export class Client {
      * This method will void a previous sale in the same batch
      */
     public async voidSale(transaction: Transaction): Promise<any> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
 
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -2629,24 +2768,6 @@ export class Client {
                     }
                 }
 
-                if (transaction.industryType === "2") {
-                    transaction.restaurantIndustry = new Restaurant(transaction);
-                    delete transaction.lodgingIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "4") {
-                    transaction.lodgingIndustry = new Lodging(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "6") {
-                    transaction.retailIndustry = new RetailMoto(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.lodgingIndustry;
-                }
-
                 let options = {
                     method: "POST",
                     protocol: "https:",
@@ -2668,7 +2789,7 @@ export class Client {
                 let request = https.request(options, function (res: any) {
                     let str = "";
                     res.on("error", (error: any) => {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = error.message;
                         return reject(pr);
                     });
@@ -2705,19 +2826,19 @@ export class Client {
                             resolve(result);
 
                         } catch (error: any) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = error.message;
                             pr.transactionCode = "5";
                             return reject(pr);
                         }
                     });
                 }).on("error", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "5";
                     return reject(pr);
                 }).on("timeout", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
                     pr.transactionCode = "5";
                     return reject(pr);
@@ -2732,7 +2853,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 pr.transactionCode = "5";
                 return reject(pr);
@@ -2745,22 +2866,22 @@ export class Client {
      * ticket only request is required to complete the transaction at the time of order fulfillment.
      */
     public async authorizeOnly(transaction: Transaction): Promise<any> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -2786,39 +2907,39 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.trackData && !transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
 
                     if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid amount";
                         return reject(pr);
                     }
 
                     if (parseFloat(transaction.amount) <= 0) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "amount must be greater than zero dollars";
                         return reject(pr);
                     }
 
                     if (transaction.paymentGatewayID === "4") {
                         if (parseFloat(transaction.amount) > 999999.99) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "amount cannot be greater than 99999.99";
                             return reject(pr);
                         }
@@ -2914,7 +3035,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 return reject(pr);
             }
@@ -2928,19 +3049,19 @@ export class Client {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -2970,24 +3091,6 @@ export class Client {
                     }
                 }
 
-                if (transaction.industryType === "2") {
-                    transaction.restaurantIndustry = new Restaurant(transaction);
-                    delete transaction.lodgingIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "4") {
-                    transaction.lodgingIndustry = new Lodging(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "6") {
-                    transaction.retailIndustry = new RetailMoto(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.lodgingIndustry;
-                }
-
                 if (!transaction) {
                     return reject({ "subject": "unable to find sales transaction for order" });
                 }
@@ -3013,7 +3116,7 @@ export class Client {
                 let request = https.request(options, function (res: any) {
                     let str = "";
                     res.on("error", (error: any) => {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = error.message;
                         return reject(pr);
                     });
@@ -3051,19 +3154,19 @@ export class Client {
                             resolve(result);
 
                         } catch (error: any) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = error.message;
                             pr.transactionCode = "8";
                             return reject(pr);
                         }
                     });
                 }).on("error", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "8";
                     return reject(pr);
                 }).on("timeout", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
                     pr.transactionCode = "8";
                     return reject(pr);
@@ -3079,7 +3182,7 @@ export class Client {
 
             } catch (error: any) {
                 // winston.logError("Error", { "application": "procharge-service", "merchantNumber": transaction.merchantNumber, "client_ip": ctx.ip, "file": "processing.ts", "method": "voidSale", "error": error.message, "requestID": transaction.universalTimeStamp || "", "subject": "Void Sale", "text": "" });
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 pr.transactionCode = "8";
                 return reject(pr);
@@ -3091,22 +3194,22 @@ export class Client {
      * This method will complete an auth only transaction
      */
     public async completeTicket(transaction: Transaction): Promise<any> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -3130,39 +3233,39 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.trackData && !transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
 
                     if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid amount";
                         return reject(pr);
                     }
 
                     if (parseFloat(transaction.amount) <= 0) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "amount must be greater than zero dollars";
                         return reject(pr);
                     }
 
                     if (transaction.paymentGatewayID === "4") {
                         if (parseFloat(transaction.amount) > 999999.99) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "amount cannot be greater than 99999.99";
                             return reject(pr);
                         }
@@ -3182,24 +3285,6 @@ export class Client {
                     if (!transaction.isRetail) {
                         transaction.isMoto = true;
                     }
-                }
-
-                if (transaction.industryType === "2") {
-                    transaction.restaurantIndustry = new Restaurant(transaction);
-                    delete transaction.lodgingIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "4") {
-                    transaction.lodgingIndustry = new Lodging(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "6") {
-                    transaction.retailIndustry = new RetailMoto(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.lodgingIndustry;
                 }
 
                 let options = {
@@ -3223,7 +3308,7 @@ export class Client {
                 let request = https.request(options, function (res: any) {
                     let str = "";
                     res.on("error", (error: any) => {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = error.message;
                         return reject(pr);
                     });
@@ -3261,19 +3346,19 @@ export class Client {
                             resolve(result);
 
                         } catch (error: any) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = error.message;
                             pr.transactionCode = "3";
                             return reject(pr);
                         }
                     });
                 }).on("error", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "3";
                     return reject(pr);
                 }).on("timeout", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
                     pr.transactionCode = "3";
                     return reject(pr);
@@ -3288,7 +3373,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 pr.transactionCode = "3";
                 return reject(pr);
@@ -3303,19 +3388,19 @@ export class Client {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -3355,24 +3440,6 @@ export class Client {
                     }
                 }
 
-                if (transaction.industryType === "2") {
-                    transaction.restaurantIndustry = new Restaurant(transaction);
-                    delete transaction.lodgingIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "4") {
-                    transaction.lodgingIndustry = new Lodging(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "6") {
-                    transaction.retailIndustry = new RetailMoto(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.lodgingIndustry;
-                }
-
                 let options = {
                     method: "POST",
                     protocol: "https:",
@@ -3394,7 +3461,7 @@ export class Client {
                 let request = https.request(options, function (res: any) {
                     let str = "";
                     res.on("error", (error: any) => {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = error.message;
                         return reject(pr);
                     });
@@ -3431,19 +3498,19 @@ export class Client {
                             resolve(result);
 
                         } catch (error: any) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = error.message;
                             pr.transactionCode = "7";
                             return reject(pr);
                         }
                     });
                 }).on("error", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "7";
                     return reject(pr);
                 }).on("timeout", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
                     pr.transactionCode = "7";
                     return reject(pr);
@@ -3458,7 +3525,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 pr.transactionCode = "7";
                 return reject(pr);
@@ -3471,22 +3538,22 @@ export class Client {
      * void transactions only on an open batch 
      */
     public async processRefund(transaction: Transaction): Promise<any> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -3509,38 +3576,38 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
 
                     if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid amount";
                         return reject(pr);
                     }
 
                     if (parseFloat(transaction.amount) <= 0) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "amount must be greater than zero dollars";
                         return reject(pr);
                     }
 
                     if (parseFloat(transaction.amount) > 999999.99) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "amount cannot be greater than 99999.99";
                         return reject(pr);
                     }
@@ -3631,7 +3698,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.transactionCode = "2";
                 pr.responseText = error.message;
                 return reject(pr);
@@ -3646,19 +3713,19 @@ export class Client {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -3697,24 +3764,6 @@ export class Client {
                     }
                 }
 
-                if (transaction.industryType === "2") {
-                    transaction.restaurantIndustry = new Restaurant(transaction);
-                    delete transaction.lodgingIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "4") {
-                    transaction.lodgingIndustry = new Lodging(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.retailIndustry;
-                }
-
-                if (transaction.industryType === "6") {
-                    transaction.retailIndustry = new RetailMoto(transaction);
-                    delete transaction.restaurantIndustry;
-                    delete transaction.lodgingIndustry;
-                }
-
                 if (!transaction) {
                     return reject({ "subject": "unable to find sales transaction for order" });
                 }
@@ -3740,7 +3789,7 @@ export class Client {
                 let request = https.request(options, function (res: any) {
                     let str = "";
                     res.on("error", (error: any) => {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = error.message;
                         return reject(pr);
                     });
@@ -3777,19 +3826,19 @@ export class Client {
                             resolve(result);
 
                         } catch (error: any) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = error.message;
                             pr.transactionCode = "6";
                             return reject(pr);
                         }
                     });
                 }).on("error", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "6";
                     return reject(pr);
                 }).on("timeout", (error: any) => {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
                     pr.transactionCode = "6";
                     return reject(pr);
@@ -3804,7 +3853,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 pr.transactionCode = "6";
                 return reject(pr);
@@ -3819,19 +3868,19 @@ export class Client {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -3840,6 +3889,7 @@ export class Client {
                 transaction.target ||= "6";
                 transaction.partialAuthIndicator ||= "2";
                 transaction.transactionCode = "V";
+                transaction.cardTypeIndicator = "P";
 
                 if (!transaction.isEcommerce) {
                     if (!transaction.isRetail) {
@@ -3852,20 +3902,20 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.trackData && !transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
@@ -3873,27 +3923,6 @@ export class Client {
                     if (transaction.paymentGatewayID === "4") {
                         transaction.amount = "0.00";
                     }
-                }
-
-                transaction.cardTypeIndicator = "P";
-
-                switch (transaction.industryType.toString()) {
-                    case "2":
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-
-                    case "4":
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                        break;
-
-                    case "6":
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                        break;
                 }
 
                 let options = {
@@ -3962,13 +3991,11 @@ export class Client {
                     });
                 }).on("error", (error: any) => {
                     let pr: TransactionResponse = new TransactionResponse();
-                    pr.transactionCode = "4";
                     pr.responseText = error.message;
                     return reject(pr);
                 }).on("timeout", (error: any) => {
                     let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = error.message ? error.message : JSON.stringify(error);
-                    pr.transactionCode = "4";
                     return reject(pr);
                 }).on("socket", (socket: any) => {
                     socket.on("end", () => {
@@ -3981,7 +4008,7 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
                 pr.responseText = error.message;
                 return reject(pr);
             }
@@ -3992,22 +4019,22 @@ export class Client {
      * Use this method to validate a credit card
      */
     public async validateCard(transaction: Transaction): Promise<TransactionResponse> {
-        return new Promise(async (resolve, reject) => {            
+        return new Promise(async (resolve, reject) => {
             try {
                 if (!transaction) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "transaction is required";
                     return reject(pr);
                 }
 
                 if (!transaction.merchantNumber) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "merchantNumber is required";
                     return reject(pr);
                 }
 
                 if (!this.options.applicationKey) {
-                    const pr: TransactionResponse = new TransactionResponse();
+                    let pr: TransactionResponse = new TransactionResponse();
                     pr.responseText = "applicationKey is required";
                     return reject(pr);
                 }
@@ -4028,20 +4055,20 @@ export class Client {
                 if (!transaction.emv) {
                     if (!transaction.trackData && !transaction.token) {
                         if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                            const pr: TransactionResponse = new TransactionResponse();
+                            let pr: TransactionResponse = new TransactionResponse();
                             pr.responseText = "missing or invalid cardnumber";
                             return reject(pr);
                         }
                     }
 
                     if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpYear";
                         return reject(pr);
                     }
 
                     if (!transaction.trackData && !transaction.ccExpMonth) {
-                        const pr: TransactionResponse = new TransactionResponse();
+                        let pr: TransactionResponse = new TransactionResponse();
                         pr.responseText = "missing or invalid ccExpMonth";
                         return reject(pr);
                     }
@@ -4049,23 +4076,6 @@ export class Client {
                     if (transaction.paymentGatewayID === "4") {
                         transaction.amount = "0.00";
                     }
-                }
-
-                switch (transaction.industryType.toString()) {
-                    case "2":
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    case "4":
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;                        
-                        break;
-                    case "6":
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                        break;
                 }
 
                 let options = {
@@ -4152,7 +4162,627 @@ export class Client {
                 request.end();
 
             } catch (error: any) {
-                const pr: TransactionResponse = new TransactionResponse();
+                let pr: TransactionResponse = new TransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to activate an gift card.
+     */
+    public async activateGiftCard(transaction: GiftCardTransaction): Promise<GiftCardTransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!transaction) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "transaction is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.industryType) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "industryType is required";
+                    return reject(pr);
+                }
+
+                if (!this.options.applicationKey) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "applicationKey is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.track2 && !transaction.cardNo) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "track2 or cardNo is required";
+                    return reject(pr);
+                }
+
+                transaction.transactionCode = "005";
+ 
+                let options = {
+                    method: "POST",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: "/api/giftcard",
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "x-api-key": this.options.applicationKey,
+                        "Authorization": this.options.authToken,
+                        "Content-Length": JSON.stringify(transaction).length
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: GiftCardTransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new GiftCardTransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as GiftCardTransactionResponse;
+                            }
+
+                            resolve(result);
+                        } catch (error: any) {
+                            let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.write(JSON.stringify(transaction));
+                request.end();
+
+            } catch (error: any) {
+                let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to redeem an eGift card issued by Electronic Payments Inc.
+     */
+    public async redeemGiftCard(transaction: GiftCardTransaction): Promise<GiftCardTransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!transaction) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "transaction is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.industryType) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "industryType is required";
+                    return reject(pr);
+                }
+
+                if (!this.options.applicationKey) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "applicationKey is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.track2 && !transaction.cardNo) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "track2 or cardNo is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.amount) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "amount is required";
+                    return reject(pr);
+                }
+
+                if (transaction.amount <= 0) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "amount must be greater than zero dollars";
+                    return reject(pr);
+                }
+
+                transaction.transactionCode = "002";
+
+                let options = {
+                    method: "POST",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: "/api/giftcard",
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "x-api-key": this.options.applicationKey,
+                        "Authorization": this.options.authToken,
+                        "Content-Length": JSON.stringify(transaction).length
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: GiftCardTransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new GiftCardTransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as GiftCardTransactionResponse;
+                            }
+
+                            resolve(result);
+                        } catch (error: any) {
+                            let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();                           
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.write(JSON.stringify(transaction));
+                request.end();
+
+            } catch (error: any) {
+                let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to fetch eGift balance.
+     */
+    public async giftCardBalanceInquiry(transaction: GiftCardTransaction): Promise<GiftCardTransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!transaction) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "transaction is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.industryType) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "industryType is required";
+                    return reject(pr);
+                }
+
+                if (!this.options.applicationKey) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "applicationKey is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.track2 && !transaction.cardNo) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "track2 or cardNo is required";
+                    return reject(pr);
+                }
+
+                if (transaction.track2 && transaction.track2.indexOf("=") <= 0) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "Invalid track2 format";
+                    return reject(pr);
+                }
+
+                transaction.transactionCode = "001";
+
+                let options = {
+                    method: "POST",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: "/api/giftcard",
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "x-api-key": this.options.applicationKey,
+                        "Authorization": this.options.authToken,
+                        "Content-Length": JSON.stringify(transaction).length
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: GiftCardTransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new GiftCardTransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as GiftCardTransactionResponse;
+                            }
+
+                            resolve(result);
+                        } catch (error: any) {
+                            let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.write(JSON.stringify(transaction));
+                request.end();
+
+            } catch (error: any) {
+                let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to transfer gift card balance from one card to another.
+     */
+    public async transferGiftCardBalance(transaction: GiftCardTransaction): Promise<GiftCardTransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!transaction) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "transaction is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.industryType) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "industryType is required";
+                    return reject(pr);
+                }
+
+                if (!this.options.applicationKey) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "applicationKey is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.track2 && !transaction.cardNo) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "track2 or cardNo is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.fromCardNo) {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = "fromCardNo is required";
+                    return reject(pr);
+                }
+
+                transaction.transactionCode = "014";
+
+                let options = {
+                    method: "POST",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: "/api/giftcard",
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "x-api-key": this.options.applicationKey,
+                        "Authorization": this.options.authToken,
+                        "Content-Length": JSON.stringify(transaction).length
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: GiftCardTransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new GiftCardTransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as GiftCardTransactionResponse;
+                            }
+
+                            resolve(result);
+                        } catch (error: any) {
+                            let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.write(JSON.stringify(transaction));
+                request.end();
+
+            } catch (error: any) {
+                let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                pr.responseText = error.message;
+                return reject(pr);
+            }
+        });
+    }
+
+    /**
+     * Use this method to void a gift card transaction.
+     */
+    public async voidGiftCardSale(transaction: GiftCardTransaction): Promise<GiftCardTransactionResponse> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!transaction) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "transaction is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.industryType) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "industryType is required";
+                    return reject(pr);
+                }
+
+                if (!this.options.applicationKey) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "applicationKey is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.track2 && !transaction.cardNo) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "track2 or cardNo is required";
+                    return reject(pr);
+                }
+
+                if (!transaction.transactionID) {
+                    let pr: TransactionResponse = new TransactionResponse();
+                    pr.responseText = "transactionID is required";
+                    return reject(pr);
+                }
+
+                transaction.transactionCode = "004";
+
+                let options = {
+                    method: "POST",
+                    protocol: "https:",
+                    host: this.options.env,
+                    port: 443,
+                    path: "/api/giftcard",
+                    allowHTTP1: true,
+                    requestCert: false,
+                    strictSSL: false,
+                    rejectUnauthorized: false,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8",
+                        "x-api-key": this.options.applicationKey,
+                        "Authorization": this.options.authToken,
+                        "Content-Length": JSON.stringify(transaction).length
+                    }
+                };
+
+                let request = https.request(options, function (res: any) {
+                    let str = "";
+                    res.on("error", (error: any) => {
+                        let pr: TransactionResponse = new TransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    });
+
+                    res.on("data", function (chunk: any) {
+                        str += chunk;
+                    });
+
+                    res.on("end", async () => {
+                        try {
+                            let result: GiftCardTransactionResponse;
+
+                            if (str.startsWith("<html>")) {
+                                result = new GiftCardTransactionResponse();
+                                result.responseText = str;
+                            } else if (str.startsWith("<!DOCTYPE")) {
+                                if (str.includes("<title>")) {
+                                    let index = str.indexOf("<title>");
+                                    let newstr = str.substring(index);
+                                    newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                    newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = newstr;
+                                } else {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                            } else {
+                                result = JSON.parse(str) as GiftCardTransactionResponse;
+                            }
+
+                            resolve(result);
+                        } catch (error: any) {
+                            let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        }
+                    });
+                }).on("error", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }).on("timeout", (error: any) => {
+                    let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
+                    pr.responseText = error.message ? error.message : JSON.stringify(error);
+                    return reject(pr);
+                }).on("socket", (socket: any) => {
+                    socket.on("end", () => {
+
+                    });
+                });
+
+                request.setTimeout(15000);
+                request.write(JSON.stringify(transaction));
+                request.end();
+
+            } catch (error: any) {
+                let pr: GiftCardTransactionResponse = new GiftCardTransactionResponse();
                 pr.responseText = error.message;
                 return reject(pr);
             }

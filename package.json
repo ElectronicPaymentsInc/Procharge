@@ -1,6 +1,6 @@
 {
-  "name": "procharge-api",
-  "version": "1.0.14",
+  "name": "procharge",
+  "version": "1.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
