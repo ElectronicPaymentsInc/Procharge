@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Client = exports.Environment = exports.TransactionResponse = exports.Transaction = exports.RetailItem = exports.ReceiptItem = exports.Lodging = exports.Restaurant = exports.RetailMoto = exports.CygmaResponse = exports.ResponseElements = void 0;
+exports.Client = exports.Environment = exports.GiftCardTransactionResponse = exports.GiftCardTransaction = exports.TransactionResponse = exports.Transaction = exports.RetailItem = exports.ReceiptItem = exports.Lodging = exports.Restaurant = exports.RetailMoto = exports.CygmaResponse = exports.ResponseElements = void 0;
 const https = __importStar(require("https"));
 class ResponseElements {
     constructor() {
@@ -1138,6 +1138,44 @@ class TransactionResponse {
     }
 }
 exports.TransactionResponse = TransactionResponse;
+class GiftCardTransaction {
+    constructor() {
+        this.transactionCode = "";
+        this.cardNo = "";
+        this.fromCardNo = "";
+        this.track2 = "";
+        this.industryType = "";
+        this.entryMode = "";
+        this.amount = 0.00;
+        this.transactionID = "";
+        this.transactionCode = "";
+        this.cardNo = "";
+        this.fromCardNo = "";
+        this.track2 = "";
+        this.industryType = "1";
+        this.entryMode = "";
+        this.amount = 0.00;
+        this.transactionID = "";
+    }
+}
+exports.GiftCardTransaction = GiftCardTransaction;
+class GiftCardTransactionResponse {
+    constructor() {
+        this.PubStrGC_ResultCode = "";
+        this.PubStrGC_TransactionID = "";
+        this.PubStrGC_RuleID = "";
+        this.PubStrGC_TransactionAmount = "";
+        this.PubStrGC_CardBalance = "";
+        this.PubStrGC_ReasonCode = "";
+        this.PubStrGC_ResultText = "";
+        this.PubStrGC_VoidTransactionID = "";
+        this.EntryMode = "";
+        this.PubIntPaymentID = "";
+        this.PubIntInvoiceID = "";
+        this.responseText = "";
+    }
+}
+exports.GiftCardTransactionResponse = GiftCardTransactionResponse;
 class Environment {
 }
 exports.Environment = Environment;
@@ -1148,29 +1186,34 @@ class Client {
         this.options = options;
     }
     /**
-     * Use this method to obtain a jwt access token
+     * Use this method to obtain a jwt access token. Use same credentials used to log into Procharge Gateway.
      */
     getAccessToken(creds) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!creds) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "invalid request";
                         return reject(pr);
                     }
                     if (!creds.email) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "email is required";
                         return reject(pr);
                     }
                     if (!creds.password) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "password is required";
                         return reject(pr);
                     }
+                    if (!creds.application) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "application name is required";
+                        return reject(pr);
+                    }
                     let authRequest = {
-                        "application": creds.appname,
+                        "application": creds.application,
                         "email": creds.email,
                         "password": creds.password
                     };
@@ -1236,13 +1279,11 @@ class Client {
                         }));
                     }).on("error", (error) => {
                         let pr = new TransactionResponse();
-                        pr.transactionCode = "1";
                         pr.responseText = error.message;
                         return reject(pr);
                     }).on("timeout", (error) => {
                         let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
-                        pr.transactionCode = "1";
                         return reject(pr);
                     }).on("socket", (socket) => {
                         socket.on("end", () => {
@@ -1253,7 +1294,101 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to obtain a new jwt access token by using the refresh_token passed in the original log in response
+     */
+    getRefreshToken(refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!refreshToken) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "refreshToken is required";
+                        return reject(pr);
+                    }
+                    let options = {
+                        method: "GET",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: `/api/authentication/refresh/${refreshToken}`,
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new TransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new TransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new TransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new TransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                result.transactionCode = "1";
+                                result.dateTime = new Date();
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new TransactionResponse();
+                                pr.transactionCode = "1";
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new TransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new TransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     return reject(pr);
                 }
@@ -1268,22 +1403,22 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
                     if (!this.options.authToken) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "authToken is required";
                         return reject(pr);
                     }
@@ -1302,34 +1437,34 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid amount";
                             return reject(pr);
                         }
                         if (parseFloat(transaction.amount) <= 0) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "amount must be greater than zero dollars";
                             return reject(pr);
                         }
                         if (transaction.paymentGatewayID === "4") {
                             if (parseFloat(transaction.amount) > 999999.99) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "amount cannot be greater than 99999.99";
                                 return reject(pr);
                             }
@@ -1419,7 +1554,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     return reject(pr);
                 }
@@ -1434,17 +1569,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -1469,21 +1604,6 @@ class Client {
                             transaction.isMoto = true;
                         }
                     }
-                    if (transaction.industryType === "2") {
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "4") {
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "6") {
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                    }
                     let options = {
                         method: "POST",
                         protocol: "https:",
@@ -1504,7 +1624,7 @@ class Client {
                     let request = https.request(options, function (res) {
                         let str = "";
                         res.on("error", (error) => {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = error.message;
                             return reject(pr);
                         });
@@ -1540,19 +1660,19 @@ class Client {
                                 resolve(result);
                             }
                             catch (error) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = error.message;
                                 pr.transactionCode = "5";
                                 return reject(pr);
                             }
                         }));
                     }).on("error", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message;
                         pr.transactionCode = "5";
                         return reject(pr);
                     }).on("timeout", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
                         pr.transactionCode = "5";
                         return reject(pr);
@@ -1565,7 +1685,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "5";
                     return reject(pr);
@@ -1582,17 +1702,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -1613,34 +1733,34 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.trackData && !transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid amount";
                             return reject(pr);
                         }
                         if (parseFloat(transaction.amount) <= 0) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "amount must be greater than zero dollars";
                             return reject(pr);
                         }
                         if (transaction.paymentGatewayID === "4") {
                             if (parseFloat(transaction.amount) > 999999.99) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "amount cannot be greater than 99999.99";
                                 return reject(pr);
                             }
@@ -1730,7 +1850,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     return reject(pr);
                 }
@@ -1745,17 +1865,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -1780,21 +1900,6 @@ class Client {
                             transaction.isMoto = true;
                         }
                     }
-                    if (transaction.industryType === "2") {
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "4") {
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "6") {
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                    }
                     if (!transaction) {
                         return reject({ "subject": "unable to find sales transaction for order" });
                     }
@@ -1818,7 +1923,7 @@ class Client {
                     let request = https.request(options, function (res) {
                         let str = "";
                         res.on("error", (error) => {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = error.message;
                             return reject(pr);
                         });
@@ -1854,19 +1959,19 @@ class Client {
                                 resolve(result);
                             }
                             catch (error) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = error.message;
                                 pr.transactionCode = "8";
                                 return reject(pr);
                             }
                         }));
                     }).on("error", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message;
                         pr.transactionCode = "8";
                         return reject(pr);
                     }).on("timeout", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
                         pr.transactionCode = "8";
                         return reject(pr);
@@ -1880,7 +1985,7 @@ class Client {
                 }
                 catch (error) {
                     // winston.logError("Error", { "application": "procharge-service", "merchantNumber": transaction.merchantNumber, "client_ip": ctx.ip, "file": "processing.ts", "method": "voidSale", "error": error.message, "requestID": transaction.universalTimeStamp || "", "subject": "Void Sale", "text": "" });
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "8";
                     return reject(pr);
@@ -1896,17 +2001,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -1926,34 +2031,34 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.trackData && !transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid amount";
                             return reject(pr);
                         }
                         if (parseFloat(transaction.amount) <= 0) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "amount must be greater than zero dollars";
                             return reject(pr);
                         }
                         if (transaction.paymentGatewayID === "4") {
                             if (parseFloat(transaction.amount) > 999999.99) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "amount cannot be greater than 99999.99";
                                 return reject(pr);
                             }
@@ -1970,21 +2075,6 @@ class Client {
                         if (!transaction.isRetail) {
                             transaction.isMoto = true;
                         }
-                    }
-                    if (transaction.industryType === "2") {
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "4") {
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "6") {
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
                     }
                     let options = {
                         method: "POST",
@@ -2006,7 +2096,7 @@ class Client {
                     let request = https.request(options, function (res) {
                         let str = "";
                         res.on("error", (error) => {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = error.message;
                             return reject(pr);
                         });
@@ -2042,19 +2132,19 @@ class Client {
                                 resolve(result);
                             }
                             catch (error) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = error.message;
                                 pr.transactionCode = "3";
                                 return reject(pr);
                             }
                         }));
                     }).on("error", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message;
                         pr.transactionCode = "3";
                         return reject(pr);
                     }).on("timeout", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
                         pr.transactionCode = "3";
                         return reject(pr);
@@ -2067,7 +2157,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "3";
                     return reject(pr);
@@ -2083,17 +2173,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -2127,21 +2217,6 @@ class Client {
                             transaction.isMoto = true;
                         }
                     }
-                    if (transaction.industryType === "2") {
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "4") {
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "6") {
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                    }
                     let options = {
                         method: "POST",
                         protocol: "https:",
@@ -2162,7 +2237,7 @@ class Client {
                     let request = https.request(options, function (res) {
                         let str = "";
                         res.on("error", (error) => {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = error.message;
                             return reject(pr);
                         });
@@ -2198,19 +2273,19 @@ class Client {
                                 resolve(result);
                             }
                             catch (error) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = error.message;
                                 pr.transactionCode = "7";
                                 return reject(pr);
                             }
                         }));
                     }).on("error", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message;
                         pr.transactionCode = "7";
                         return reject(pr);
                     }).on("timeout", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
                         pr.transactionCode = "7";
                         return reject(pr);
@@ -2223,7 +2298,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "7";
                     return reject(pr);
@@ -2240,17 +2315,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -2269,33 +2344,33 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (!transaction.amount || isNaN(parseFloat(transaction.amount))) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid amount";
                             return reject(pr);
                         }
                         if (parseFloat(transaction.amount) <= 0) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "amount must be greater than zero dollars";
                             return reject(pr);
                         }
                         if (parseFloat(transaction.amount) > 999999.99) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "amount cannot be greater than 99999.99";
                             return reject(pr);
                         }
@@ -2381,7 +2456,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.transactionCode = "2";
                     pr.responseText = error.message;
                     return reject(pr);
@@ -2397,17 +2472,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -2440,21 +2515,6 @@ class Client {
                             transaction.isMoto = true;
                         }
                     }
-                    if (transaction.industryType === "2") {
-                        transaction.restaurantIndustry = new Restaurant(transaction);
-                        delete transaction.lodgingIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "4") {
-                        transaction.lodgingIndustry = new Lodging(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.retailIndustry;
-                    }
-                    if (transaction.industryType === "6") {
-                        transaction.retailIndustry = new RetailMoto(transaction);
-                        delete transaction.restaurantIndustry;
-                        delete transaction.lodgingIndustry;
-                    }
                     if (!transaction) {
                         return reject({ "subject": "unable to find sales transaction for order" });
                     }
@@ -2478,7 +2538,7 @@ class Client {
                     let request = https.request(options, function (res) {
                         let str = "";
                         res.on("error", (error) => {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = error.message;
                             return reject(pr);
                         });
@@ -2514,19 +2574,19 @@ class Client {
                                 resolve(result);
                             }
                             catch (error) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = error.message;
                                 pr.transactionCode = "6";
                                 return reject(pr);
                             }
                         }));
                     }).on("error", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message;
                         pr.transactionCode = "6";
                         return reject(pr);
                     }).on("timeout", (error) => {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
                         pr.transactionCode = "6";
                         return reject(pr);
@@ -2539,7 +2599,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     pr.transactionCode = "6";
                     return reject(pr);
@@ -2555,17 +2615,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -2573,6 +2633,7 @@ class Client {
                     transaction.target || (transaction.target = "6");
                     transaction.partialAuthIndicator || (transaction.partialAuthIndicator = "2");
                     transaction.transactionCode = "V";
+                    transaction.cardTypeIndicator = "P";
                     if (!transaction.isEcommerce) {
                         if (!transaction.isRetail) {
                             transaction.isMoto = true;
@@ -2582,41 +2643,24 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.trackData && !transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (transaction.paymentGatewayID === "4") {
                             transaction.amount = "0.00";
                         }
-                    }
-                    transaction.cardTypeIndicator = "P";
-                    switch (transaction.industryType.toString()) {
-                        case "2":
-                            transaction.restaurantIndustry = new Restaurant(transaction);
-                            delete transaction.lodgingIndustry;
-                            delete transaction.retailIndustry;
-                        case "4":
-                            transaction.lodgingIndustry = new Lodging(transaction);
-                            delete transaction.restaurantIndustry;
-                            delete transaction.retailIndustry;
-                            break;
-                        case "6":
-                            transaction.retailIndustry = new RetailMoto(transaction);
-                            delete transaction.restaurantIndustry;
-                            delete transaction.lodgingIndustry;
-                            break;
                     }
                     let options = {
                         method: "POST",
@@ -2682,13 +2726,11 @@ class Client {
                         }));
                     }).on("error", (error) => {
                         let pr = new TransactionResponse();
-                        pr.transactionCode = "4";
                         pr.responseText = error.message;
                         return reject(pr);
                     }).on("timeout", (error) => {
                         let pr = new TransactionResponse();
                         pr.responseText = error.message ? error.message : JSON.stringify(error);
-                        pr.transactionCode = "4";
                         return reject(pr);
                     }).on("socket", (socket) => {
                         socket.on("end", () => {
@@ -2699,7 +2741,7 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
                     pr.responseText = error.message;
                     return reject(pr);
                 }
@@ -2714,17 +2756,17 @@ class Client {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     if (!transaction) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "transaction is required";
                         return reject(pr);
                     }
                     if (!transaction.merchantNumber) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "merchantNumber is required";
                         return reject(pr);
                     }
                     if (!this.options.applicationKey) {
-                        const pr = new TransactionResponse();
+                        let pr = new TransactionResponse();
                         pr.responseText = "applicationKey is required";
                         return reject(pr);
                     }
@@ -2741,40 +2783,24 @@ class Client {
                     if (!transaction.emv) {
                         if (!transaction.trackData && !transaction.token) {
                             if (!transaction.cardNumber || transaction.cardNumber.length < 14) {
-                                const pr = new TransactionResponse();
+                                let pr = new TransactionResponse();
                                 pr.responseText = "missing or invalid cardnumber";
                                 return reject(pr);
                             }
                         }
                         if (!transaction.trackData && !transaction.ccExpYear || transaction.ccExpYear.length < 2) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpYear";
                             return reject(pr);
                         }
                         if (!transaction.trackData && !transaction.ccExpMonth) {
-                            const pr = new TransactionResponse();
+                            let pr = new TransactionResponse();
                             pr.responseText = "missing or invalid ccExpMonth";
                             return reject(pr);
                         }
                         if (transaction.paymentGatewayID === "4") {
                             transaction.amount = "0.00";
                         }
-                    }
-                    switch (transaction.industryType.toString()) {
-                        case "2":
-                            transaction.restaurantIndustry = new Restaurant(transaction);
-                            delete transaction.lodgingIndustry;
-                            delete transaction.retailIndustry;
-                        case "4":
-                            transaction.lodgingIndustry = new Lodging(transaction);
-                            delete transaction.restaurantIndustry;
-                            delete transaction.retailIndustry;
-                            break;
-                        case "6":
-                            transaction.retailIndustry = new RetailMoto(transaction);
-                            delete transaction.restaurantIndustry;
-                            delete transaction.lodgingIndustry;
-                            break;
                     }
                     let options = {
                         method: "POST",
@@ -2857,7 +2883,587 @@ class Client {
                     request.end();
                 }
                 catch (error) {
-                    const pr = new TransactionResponse();
+                    let pr = new TransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to activate an gift card.
+     */
+    activateGiftCard(transaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!transaction) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "transaction is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.industryType) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "industryType is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.applicationKey) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.track2 && !transaction.cardNo) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "track2 or cardNo is required";
+                        return reject(pr);
+                    }
+                    transaction.transactionCode = "005";
+                    let options = {
+                        method: "POST",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: "/api/giftcard",
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "x-api-key": this.options.applicationKey,
+                            "Authorization": this.options.authToken,
+                            "Content-Length": JSON.stringify(transaction).length
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new GiftCardTransactionResponse();
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.write(JSON.stringify(transaction));
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to redeem an eGift card issued by Electronic Payments Inc.
+     */
+    redeemGiftCard(transaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!transaction) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "transaction is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.industryType) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "industryType is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.applicationKey) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.track2 && !transaction.cardNo) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "track2 or cardNo is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.amount) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "amount is required";
+                        return reject(pr);
+                    }
+                    if (transaction.amount <= 0) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "amount must be greater than zero dollars";
+                        return reject(pr);
+                    }
+                    transaction.transactionCode = "002";
+                    let options = {
+                        method: "POST",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: "/api/giftcard",
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "x-api-key": this.options.applicationKey,
+                            "Authorization": this.options.authToken,
+                            "Content-Length": JSON.stringify(transaction).length
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new GiftCardTransactionResponse();
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.write(JSON.stringify(transaction));
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to fetch eGift balance.
+     */
+    giftCardBalanceInquiry(transaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!transaction) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "transaction is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.industryType) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "industryType is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.applicationKey) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.track2 && !transaction.cardNo) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "track2 or cardNo is required";
+                        return reject(pr);
+                    }
+                    if (transaction.track2 && transaction.track2.indexOf("=") <= 0) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "Invalid track2 format";
+                        return reject(pr);
+                    }
+                    transaction.transactionCode = "001";
+                    let options = {
+                        method: "POST",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: "/api/giftcard",
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "x-api-key": this.options.applicationKey,
+                            "Authorization": this.options.authToken,
+                            "Content-Length": JSON.stringify(transaction).length
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new GiftCardTransactionResponse();
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.write(JSON.stringify(transaction));
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to transfer gift card balance from one card to another.
+     */
+    transferGiftCardBalance(transaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!transaction) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "transaction is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.industryType) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "industryType is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.applicationKey) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.track2 && !transaction.cardNo) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "track2 or cardNo is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.fromCardNo) {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = "fromCardNo is required";
+                        return reject(pr);
+                    }
+                    transaction.transactionCode = "014";
+                    let options = {
+                        method: "POST",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: "/api/giftcard",
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "x-api-key": this.options.applicationKey,
+                            "Authorization": this.options.authToken,
+                            "Content-Length": JSON.stringify(transaction).length
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new GiftCardTransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new GiftCardTransactionResponse();
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.write(JSON.stringify(transaction));
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new GiftCardTransactionResponse();
+                    pr.responseText = error.message;
+                    return reject(pr);
+                }
+            }));
+        });
+    }
+    /**
+     * Use this method to void a gift card transaction.
+     */
+    voidGiftCardSale(transaction) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    if (!transaction) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "transaction is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.industryType) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "industryType is required";
+                        return reject(pr);
+                    }
+                    if (!this.options.applicationKey) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "applicationKey is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.track2 && !transaction.cardNo) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "track2 or cardNo is required";
+                        return reject(pr);
+                    }
+                    if (!transaction.transactionID) {
+                        let pr = new TransactionResponse();
+                        pr.responseText = "transactionID is required";
+                        return reject(pr);
+                    }
+                    transaction.transactionCode = "004";
+                    let options = {
+                        method: "POST",
+                        protocol: "https:",
+                        host: this.options.env,
+                        port: 443,
+                        path: "/api/giftcard",
+                        allowHTTP1: true,
+                        requestCert: false,
+                        strictSSL: false,
+                        rejectUnauthorized: false,
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8",
+                            "x-api-key": this.options.applicationKey,
+                            "Authorization": this.options.authToken,
+                            "Content-Length": JSON.stringify(transaction).length
+                        }
+                    };
+                    let request = https.request(options, function (res) {
+                        let str = "";
+                        res.on("error", (error) => {
+                            let pr = new TransactionResponse();
+                            pr.responseText = error.message;
+                            return reject(pr);
+                        });
+                        res.on("data", function (chunk) {
+                            str += chunk;
+                        });
+                        res.on("end", () => __awaiter(this, void 0, void 0, function* () {
+                            try {
+                                let result;
+                                if (str.startsWith("<html>")) {
+                                    result = new GiftCardTransactionResponse();
+                                    result.responseText = str;
+                                }
+                                else if (str.startsWith("<!DOCTYPE")) {
+                                    if (str.includes("<title>")) {
+                                        let index = str.indexOf("<title>");
+                                        let newstr = str.substring(index);
+                                        newstr = newstr.substring(0, newstr.indexOf("</title>"));
+                                        newstr = newstr.replace("<title>", "").replace("</title>", "");
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = newstr;
+                                    }
+                                    else {
+                                        result = new GiftCardTransactionResponse();
+                                        result.responseText = str;
+                                    }
+                                }
+                                else {
+                                    result = JSON.parse(str);
+                                }
+                                resolve(result);
+                            }
+                            catch (error) {
+                                let pr = new GiftCardTransactionResponse();
+                                pr.responseText = error.message;
+                                return reject(pr);
+                            }
+                        }));
+                    }).on("error", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message;
+                        return reject(pr);
+                    }).on("timeout", (error) => {
+                        let pr = new GiftCardTransactionResponse();
+                        pr.responseText = error.message ? error.message : JSON.stringify(error);
+                        return reject(pr);
+                    }).on("socket", (socket) => {
+                        socket.on("end", () => {
+                        });
+                    });
+                    request.setTimeout(15000);
+                    request.write(JSON.stringify(transaction));
+                    request.end();
+                }
+                catch (error) {
+                    let pr = new GiftCardTransactionResponse();
                     pr.responseText = error.message;
                     return reject(pr);
                 }
